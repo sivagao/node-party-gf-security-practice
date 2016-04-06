@@ -8,9 +8,14 @@
 - [我的博客](https://github.com/gaohailang/blog) （一些技术上的思考和分享）
 
 ```note
-前几位的分享都特别棒，在今天的活动的尾声我给大家带来的topics是讲述我们广发证券这样一个传统券商在新技术Nodejs的一些使用尝试的经验教训的。
+前几位的分享都特别棒，在今天的活动的尾声我给大家带来的topics是讲述我们广发证券这样一个传统券商在新技术Nodejs的一些使用尝试的经验。
 
-先来个简单的自我介绍：我毕业前在百度实现做前端开发的一些工作，临近毕业突然觉醒想去创业公司去试试就到了豌豆荚一直从事公司的商品产品如开发者中心，集成了应用上传，游戏联系，广告投放管理和IAS接入，openAPI等等。去年开始从北京到深圳（原因你们都懂得），发现这边真是除了贵腾讯好像没有什么又大又好公司了，偶然的机会再拉钩上看到酷炫的xxx，一下子就被吸引了（虽然xxxx
+先来个简单的自我介绍：我毕业前在百度实现做前端开发的一些工作，临近毕业突然觉醒想去创业公司去试试就到了豌豆荚一直从事公司的商品产品如开发者中心。去年开始从北京到深圳（原因你们都懂得），发现这边真是除了贵腾讯好像没有什么又大又好公司了，偶然的机会再拉钩上看到酷炫的xxx，一下子就被吸引了（虽
+然xxxx
+
+刚到广发证券做了混合应用的开发，较为完整的。现在主要专注团队内部的node.js后端开发和微服务相关的实践。
+
+私下我对技术还是非常兴趣的，会翻译和写一些文章在网上。
 
 ![](./images/14598836453050.jpg)
 
@@ -18,7 +23,7 @@
 
 ### 分享大纲
 
-* 为什么我们这么玩
+* 我们是谁
 * 我们和开源
 * 我们对 Node.js 的定位
 * API Server 和 Node.js
@@ -29,6 +34,8 @@
 
 ```note
 今天我要分享的agenda大致是：
+我们是谁（讲下背景），然后node的在公司的定位，接下来就是我们怎么看待APIserver，和微服务如何结合，然后就是实施的部分如koa2相关的，普通的node开发，还有扩展的node应用服务上下游的部分。
+
 是从上到下，从云到node的讲解，从新node讲到就node，从node将会普通web开发
 ```
 
@@ -48,14 +55,14 @@
 ```note
 去看我们的一些技术选项前，先看看我们是什么样的组织，再看看我们对开源技术的态度，这样才能得出一些背后的原因，也给你们一些技术参考。
 
-不过新等等，
-最早运用这些技术框架开发复杂运用的公司了（金融？
-和大家想的一样，为什么一个传统券商，会在技术上这么有追求呢，你们的IT产品和需求不都是外包的吗？
-那你们为什么还放出这样的广告『证券行业创新高涨，国际化进程中，投行等』
+你们可能会好奇，券商银行的IT系统好烂的哦，你们不是外包？怎么这么敢了？
+从13年开始，我们已经重视相关，
+我们希望和国际投行对肩(『证券行业创新高涨，国际化进程中，投行等』)（IT 1/3的比例，国内远远不到）
+我们的技术选型时非常前言的，最早运用这些技术框架开发复杂运用的公司了（金融？
 ```
 
 
-#### Why - 为什么这样的技术选型
+#### 这样选型的原因
 
 - 吸引爱玩技术的你们
 - 解决问题弯道超车
@@ -69,7 +76,6 @@
 最终还是招到人：
 3点
 
-这里就引入了我们今天的主角：Node.js，我们可能是金融行业乃至是互联网用这些技术开发复杂应用的团队了。 
 ```
 
 
@@ -81,7 +87,8 @@
 
 
 ```note
-所以从去年开始，开源上的做了一些工作：
+我们非常重视开源技术，去IOE化
+所以从去年开始，开源上的做了一些工作，回馈社区：
 我们团队大神在去年去QCon上海在将我们在es6上的一些前沿实践（业界也有我们es6-style-guide，可以再参考）
 同时去去年尾声开始在angular2上写书准备，翻译了官方的guide，所以我们收到Google官方的邀请让我们推动ng2在国内文档化的工作。
 更多的一些技术分享，可以在我们的github repo中看到
@@ -117,12 +124,11 @@
 
 在我们的云端edge就大量使用着node。js来做它适合做的事情，甚至一些对性能不那么苛刻的微服务也有js来构建的（如果解决好类型等开发复杂应用稳定性
 
-从接入层之后到柜台之前都变微服务
+并且从去年开始，我们推崇从接入层之后到柜台之前都变微服务
 	•	原子化服务 – 细粒度、独立部署、独立维护升级、独立扩容 
 	•	所有服务内置平台层、应用层监控(Google Dapper类技术)
 • 金管家、金钥匙、易淘金、开户系统。。。功能拆分、微服务容器、云化 
 • 应用层“聚合” – 不同应用场景聚合不同的微服务 
-
 
 
 可以看到我们的架构中（接入层和微服务，原子化，场景化聚合）
@@ -134,11 +140,17 @@
 
 #### 不同时代的Server
 
-- backend page 
-- simple restful（or db access）
-	- restful extend
+- Backend 渲染页面 + 部分 Ajax
+- 前后分离 RESTful（或 db access）
+	- RESTful extend
 - API Server 新方向
 	- graphql & falcor
+
+```note
+
+但是 ajax 变多，客户端自己灵活的渲染模板， mvc based backend stretched to serve as both the web application and API server
+
+```
 
 #### RESTful
 
@@ -148,23 +160,29 @@
 - Bulk Inserts
 - Embedded & Sub Resource
 
+```sh
+/people?where={"lastname": "Doe"}
+/people?sort=city,-lastname
+?sort=[("lastname", -1)] - mongodb style
+/people?projection={"lastname": 1, "born": 1}
+/comment/?embedded={"author": 0}
+
+curl -d '[{"firstname": "barack", "lastname": "obama"}, {"firstname": "mitt", "lastname": "romney"}]' -H 'Content-Type: application/json' http://eve-demo.herokuapp.com/people
+```
+
 
 ```note
-
-几层的RESTful成熟度模型
-
-Hekru 提供的指南。
 
 /people?where={"lastname": "Doe"}
 /people?sort=city,-lastname
 ?sort=[("lastname", -1)] - mongodb style
-
 /people?projection={"lastname": 1, "born": 1}
-
 /comment/?embedded={"author": 0}
 
-$ curl -d '[{"firstname": "barack", "lastname": "obama"}, {"firstname": "mitt", "lastname": "romney"}]' -H 'Content-Type: application/json' http://eve-demo.herokuapp.com/people
+curl -d '[{"firstname": "barack", "lastname": "obama"}, {"firstname": "mitt", "lastname": "romney"}]' -H 'Content-Type: application/json' http://eve-demo.herokuapp.com/people
 
+几层的RESTful成熟度模型
+Hekru 提供的指南。
 看起来每个开发者最后都会疑问那么关于API接口呢？很多人会直接想到RESTful API（因为太流行了），同时SOAP真的成为过去式了。同时现在也有不少其他标准如：HATEOAS, JSON API,HAL,GraphQL 等
 
 ```
@@ -192,19 +210,12 @@ $ curl -d '[{"firstname": "barack", "lastname": "obama"}, {"firstname": "mitt", 
 GraphQL 赋予客户端强大的能力（也是职责），允许它来实施任意的查询接口。结合Relay，它能为你处理客户端状态和缓存。在服务器端实施GraphQL看起来比较困难而且现有的文档大部分是针对Node.js的
 
 网飞(NetFlix）的Falcor 看起来它也能提供那些Relay和GraphQL提供的功能，但是对于服务器端的实现要求很低。但现在它仅仅是开发者预览版没有正式发布。
-```
-
-#### 关于聚合
-
-- batch fetch
-- ql.io
 
 
-```note
 所有这些有名的标准规范有他们各种的奇怪之处。一些是过于复杂，一些只能处理读取没有覆盖到更新接口。一些又严重和REST走失。许多人选择构建它们自己的，但是最终也要解决它们设计上带来的问题。
 
-我不认为现在有什么方案是个大满贯（完美的），但是下面是我对API应该有的功能的一些思考：
 
+我不认为现在有什么方案是个大满贯（完美的），但是下面是我对API应该有的功能的一些思考：
 It should be predictable. Your endpoints should follow consistent conventions.
 It should allow fetching multiple entities in one round trip: needing 15 queries to fetch everything you need on page load will give poor performance.
 Make sure you have a good update story: many specifications only covers reads, and you’ll need to update stuff sometimes.
@@ -214,6 +225,12 @@ It should be easy to consume: I should be able to easily consume it with fetch, 
 同事考虑，如果你实施一个标准化的RESTful资源路径时，使用Swagger来文档化我们的API
 
 ```
+
+#### 关于聚合
+
+- batch fetch
+- ql.io
+
 
 ### 微服务和Node.js
 
@@ -227,17 +244,22 @@ It should be easy to consume: I should be able to easily consume it with fetch, 
 ![](./images/14598813893269.jpg)
 
 
+
+
+```note
 加入之前的文章  https://github.com/gf-rd/blog/issues/10
 
 需要在一些节点加上agent，实现动态扩容等(mind shift from 机器性能到集群扩展容，随时挂掉预设）
 
 公司整理的一些规范：
 
-- docker化（见指南
+- docker化
 - 无状态。从而方便Kubernets扩缩容或调整机器资源（重启等），或者有状态恢复机制
 - 环境变量配置优先（配置项通过env传入，如数据库，redis等
 - 不要使用卷映射（如logs文件通常打到console中，然后fluentd传入大数据（走kafka; node_modules ADD file 到docker中
-- 提供健康检查脚本(见指南)
+- 提供健康检查脚本
+
+```
 
 
 #### 微服务集成开发
@@ -392,7 +414,7 @@ https://tc39.github.io/ecmascript-asyncawait/
     - response-time 展示
 
 ```note
-（比起generator更直白，需要wrap，co，next 这些是什么鬼？！）
+（比起generator更直白，需要wrap，co，yield，* 这些是什么鬼？！）
 ```
 
 ##### 同步代码
@@ -523,6 +545,16 @@ function compose(middleware){
 把es6的generator和yield的变成es7的async/await写法
 
 ```js
+// use Koa 1.0 middleware
+app.use(function*(next) {
+  const start = Date.now()
+
+  yield next
+
+  const ms = Date.now() - start
+  console.log(`${this.method} ${this.url} - ${ms}ms`)
+})
+
 // koa-logger@1 only support koa@1
 const logger = require("koa-logger")
 
@@ -671,6 +703,8 @@ nodemon  Simple monitor script for use during development of a node.js app.
 - npm run prepush : npm-run-all lint test test:deps
 - npm run inspect : jsinspect
 
+![](./images/14599285872337.jpg)
+
 
 ```note
 
@@ -682,6 +716,8 @@ nodemon  Simple monitor script for use during development of a node.js app.
 - https://github.com/danielstjules/jsinspect (js smell 有截图)
 
 ![](./images/14598775638257.jpg)
+
+![](./images/14599298644351.jpg)
 
 
 ```note
