@@ -15,7 +15,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/animate.css">
 		<link rel="stylesheet" href="css/theme/serif.css" id="theme">
 
 		<!-- Code syntax highlighting -->
@@ -30,7 +29,8 @@
 		.gftech-opensources .current-fragment,
 		.apiserver-graphqls .current-fragment,
 		.microservice-requests .current-fragment,
-		.general-codereview-platos .current-fragment{
+		.general-codereview-platos .current-fragment,
+		.koa-middleware-compose, .current-fragment {
 			width: 80%;
 		  position: absolute;
 		  left: 10%;
@@ -49,8 +49,11 @@
 			top: 80px;
 		}
 
-		.koa-composte-codes pre {
-			top: -100px;
+		/*.koa-middleware-compose {
+			top: -60px;
+		}*/
+		.koa-middleware-compose img {
+			top: 0;
 		}
 
 		.end-join-frg1{
@@ -107,13 +110,11 @@
 						## 分享大纲
 
 						* 我们是谁？
-						* 我们和开源
 						* 我们对 Node.js 的定位
-						* API Server 和 Node.js
-						* 微服务 和 Node.js
+						* API Server 一览
 						* Koa2 和 Node.js
 						* 日常开发 与 Node.js
-						* Web 开发 和 Node.js
+						* 微服务 和 Node.js
 					</section>
 				</section>
 
@@ -150,38 +151,6 @@
 					</section>
 				</section>
 
-				<!-- 我们和开源 -->
-				<section>
-					<section>
-						<h1>我们和开源</h1>
-					</section>
-					<section>
-						<h2 id="-">开源的参与和贡献</h2>
-						<ul>
-							<li>ES6</li>
-							<li>Angular2</li>
-							<li>更多见Blog，我们的技术分享</li>
-						</ul>
-						<hr>
-						<table>
-							<thead>
-							<tr>
-								<th style="text-align:center">QCon分享</th>
-								<th style="text-align:center">翻译</th>
-								<th style="text-align:center">技术博客</th>
-							</tr>
-							</thead>
-							<tbody class="gftech-opensources">
-								<tr>
-								<td style="text-align:center"><img src="./images/14598823363661.jpg" class="fragment gftech-opensource-1"></td>
-								<td style="text-align:center"><img src="./images/IMG_9916.jpg" class="fragment gftech-opensource-2"></td>
-								<td style="text-align:center"><img src="./images/14598823953064.jpg" class="fragment gftech-opensource-3"></td>
-								</tr>
-							</tbody>
-						</table>
-					</section>
-				</section>
-
 				<!-- 我们对 Node.js 的定位 -->
 				<section>
 					<section>
@@ -203,13 +172,14 @@
 						<h1>API Server 和 Node.js</h1>
 					</section>
 					<section data-markdown>
-						## 不同时代的Server职责和功能
+						## 不同时代的Server
 
 						- Backend 渲染页面 + 部分 Ajax
 						- 前后分离 RESTful（或 db access）
 							- RESTful extend
 						- API Server 新方向
 							- graphql & falcor
+							- meteor
 					</section>
 					<section data-markdown>
 						## RESTful Extend
@@ -223,7 +193,7 @@
 						```js
 						/people?where={"lastname": "Doe"}
 						/people?sort=city,-lastname
-						?sort=[("lastname", -1)] - mongodb style
+						/people?sort=[("lastname", -1)] // mongodb style
 						/people?projection={"lastname": 1, "born": 1}
 						/comment/?embedded={"author": 0}
 
@@ -234,11 +204,13 @@
 						## API Server 新方向
 
 						- GraphQL & Relay @ Facebook
-							- [GraphQL：数据定义和逻辑迁移]()
+							- [GraphQL：数据定义和逻辑前移]()
 							- [Relay：客户端状态和缓存]()
 							- [graphql-server 开源实现](https://github.com/RisingStack/graphql-server)
 						- Falcor @ Netflix
 							- 类似效果，容易实现
+						- Meteor
+							- send data over the wire
 					</section>
 					<section>
 						<img src="./images/14598832396579.jpg" width="200px;">
@@ -249,10 +221,406 @@
 							</tr>
 						</table>
 					</section>
-					<section>
+					<!-- <section>
 						<img src="./images/14598834022920.jpg" alt="">
+					</section> -->
+					<section data-markdown>
+						## 神器的Meteor
+
+						- LiveQuery, DDP, pub/sub, remote method
+
+						![](./images/14599935528704.jpg)
 					</section>
 				</section>
+
+				<!-- Koa2 与 Node.js -->
+				<section>
+					<section>
+						<h1>Koa2 与 Node.js</h1>
+					</section>
+					<section data-markdown>
+						## 关于 Koa2
+
+						- [它是什么](https://github.com/koajs/koa/issues/533)
+							- [也来八卦：Express 的奇葩发展史](https://github.com/gaohailang/blog/issues/7)
+						- 何时发布
+							- [ecmascript async-await stage 3](https://tc39.github.io/ecmascript-asyncawait/)
+							- 等V8引擎（Chromium）开发完2a
+							- 等2a被集成到 Node.js
+							- 不要害怕，很多人通过babel用在线上
+							- [Microsoft ChakraCore 已经实现](https://github.com/Microsoft/ChakraCore/tree/master/test/es7)，Cheers！
+						- 哪些改动？
+							- 中间件 & generator, yield
+					</section>
+					<!-- 为什么选择 Koa2 -->
+					<section data-markdown>
+						## 为什么选择 Koa2
+
+						- 1 语义合适的异步
+						- 2 干干净净的错误处理
+						- 3 优雅回形针的中间件
+							- response-time demo
+					</section>
+					<section data-markdown>
+						## 语义合适的异步
+
+						```js
+						const fs = require('fs-promise');
+
+						async function readDirContent(doc) {
+						  let paths = await fs.readdir('docs');
+
+						  let files = await paths.map(function(path){
+						    return fs.readFile('docs/' + path, 'utf8');
+						  });
+
+						  this.type = 'markdown';
+						  this.body = files.join('');
+						};
+
+						/*async function fetchSepcialShops (ctx, next){
+						  let spNumTypeMap = ['manager', 'developer', 'userFav'];
+						  ctx.checkQuery('tradeId', 'Invalid trade id').notEmpty();
+						  ctx.checkQuery('shopId', 'Invalid shop id').notEmpty();
+						  if(!isReqRight(ctx)) return;
+
+						  let {tradeId, shopId} = ctx.request.query
+						    , userId = ctx.request.get('userId'), reses;
+						  let [r1, r2, r3] = await Promise.all([
+						    rp({url: storeSpShopList, qs: {type: 1, userId: tradeId}}),
+						    rp({url: storeSpShopList, qs: {type: 2, userId: tradeId}}),
+						    userId ? rp({url: userFavShopList, headers: {userId}, qs: {
+						      shopId, from: 1, size: 5
+						    }}) : {}
+						  ]);
+						  ctx.body = _.zipObject(spNumTypeMap, [r1.data, r2.data, _.map(r3.data, 'shop')]);
+						}*/
+						```
+					</section>
+					<section data-markdown>
+						## 干干净净的错误处理
+
+						```js
+						module.exports = async function(ctx, next) {
+						  try {
+						    await next();
+						  } catch (err) {
+						    if (err == null) {
+						      err = new Error('Null or undefined error');
+						    }
+						    ctx.status = err.status || 500;
+						    ctx.body = {
+						      success: false,
+						      message: err.stack
+						    };
+						    ctx.app.emit('error', err, this);
+						  }
+						};
+						// 用于关闭前的一些处理如保存数据，记录错误，发送邮件等等
+						process.on('uncaught', ()={});
+						```
+					</section>
+					<section data-markdown>
+						## 优雅回形针的中间件
+
+						```js
+						function responseTime() {
+						  return async(ctx, next) => {
+						    let start = new Date;
+						    await next();
+						    var delta = new Date - start;
+						    ctx.set('X-Response-Time', delta + 'ms');
+						  }
+						}
+						```
+					</section>
+					<!-- 我们的koa中间件 -->
+					<section data-markdown>
+						## 我们的koa中间件
+
+						- koa-compose
+						- 常见的middleware
+						- koa-adapter
+						- 文件即路由
+						- koa-validator & joi
+					</section>
+					<section>
+						<h2>中间件回形针的运行</h2>
+
+						<table>
+							<tr>
+								<td><img src="./images/koa-middleware.gif"></td>
+								<td style="vertical-align: middle;">
+									<img src="./images/14598798348020.jpg">
+								</td>
+							</tr>
+						</table>
+					</section>
+					<section data-markdown>
+						## 回形针的实现 koa compose
+						```js
+						function compose (middleware) {
+						  return function (context, next) {
+						    // last called middleware #
+						    let index = -1
+						    return dispatch(0)
+						    function dispatch (i) {
+						      if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+						      index = i
+						      const fn = middleware[i] || next
+						      if (!fn) return Promise.resolve()
+						      try {
+						        return Promise.resolve(fn(context, function next () {
+						          return dispatch(i + 1)
+						        }))
+						      } catch (err) {
+						        return Promise.reject(err)
+						      }
+						    }
+						  }
+						}
+						```
+					</section>
+					<section data-markdown>
+						## 常见的中间件
+						![](./images/14598798901987.jpg)
+					</section>
+					<section data-markdown>
+						## 兼容中间件 - [koa adapter](https://github.com/th507/koa-adapter)
+
+						- 1.x中间件的引入
+						- 把 es6 的  generator/yield
+						- 变成 es7 的 async/await 写法
+
+						```js
+						// Koa 1.0 middleware
+						app.use(function*(next) {
+						  const start = Date.now();
+
+						  yield next;
+
+						  const ms = Date.now() - start;
+						  console.log(`${this.method} ${this.url} - ${ms}ms`);
+						});
+
+						// koa-res-time@1 only support koa@1
+						const adapt = require("koa-adapter");
+						const resTime = require("koa-res-time");
+
+						// use legacy middlewares with adapt(...)
+						app.use(adapt(resTime));
+						```
+					</section>
+					<section data-markdown>
+						## 接口验证和数据验证
+
+						- [koa-validate: validate/format req params](https://github.com/RocksonZeta/koa-validate)
+						- [joi: object schema validation](https://github.com/hapijs/joi)
+
+						```js
+						ctx.checkQuery('query', 'Invalid query').notEmpty();
+						ctx.checkQuery('type', 'Invalid type')
+						  .isIn(baseSearchTypes.concat(['all']));
+
+						let joiUserSchema = Joi.object({
+						  name: Joi.object({
+						    first: Joi.string().required(),
+						    last: Joi.string().required()
+						  }),
+						  email: Joi.string().email().required(),
+						  bestFriend: Joi.string().meta({ type: 'ObjectId', ref: 'User' }),
+						  metaInfo: Joi.any()
+						});
+						```
+					</section>
+				</section>
+
+				<!-- 日常开发与 Node.js -->
+				<section>
+					<section>
+						<h1>日常开发与 Node.js</h1>
+					</section>
+					<section data-markdown>
+						## 日常注意点
+
+						- ES6 化
+						- 构建过程
+						- 在线上运行
+						- 2016年新注意点
+						- Web 上下游
+					</section>
+
+					<section data-markdown>
+						## ES6，马上开始
+						- 迁移 legacy 代码
+
+						```js
+						// before
+						var page = req.query.page,
+							, size = req.query.size;
+						// after
+						let {pgae, size} = req.query;
+						rp({
+							uri, params: {page, size}
+						});
+						```
+						- Babel 集成
+
+						```json
+						{
+							"presets": ["es2015-node5"],
+							"plugins": [
+								"transform-async-to-generator",
+								"syntax-async-functions"
+							]
+						}
+						```
+					</section>
+
+					<!-- npm scripts 构建过程 -->
+					<section data-markdown>
+						## npm scripts 构建过程
+						更详细参见我们的[脚手架文章](https://github.com/gf-rd/blog/issues/20)
+
+						- 及时更新依赖
+						- 文件变化监控
+						- 入库前检查
+						- 代码质量检查
+							- 代码坏味道
+
+					</section>
+					<section data-markdown>
+						## 及时更新依赖 - [npm-check](https://github.com/dylang/npm-check)
+
+						![](./images/14598767264510.jpg)￼
+					</section>
+
+					<section data-markdown>
+						## 文件变化监控 - nodemon
+
+						```json
+						{
+							"main": "index.js",
+							"scripts": {
+								"dev": "nodemon --exec babel-node -- $npm_package_main"
+							}
+						}
+						```
+						![](./images/14598770272183.jpg)￼
+					</section>
+
+					<section data-markdown>
+						## 入库前检查
+
+						[husky](https://npmjs.org/package/husky) 可以修改你的git命令，提供hook点在commit/push/merge 前执行检查
+
+						- npm run precommit : npm test
+						- npm run prepush : npm-run-all lint test test:deps
+						- npm run inspect : jsinspect
+
+						![](./images/14599285872337.jpg)
+					</section>
+
+					<section>
+						<h2 id="-">代码质量检查</h2>
+						<ul>
+							<li><a href="https://github.com/es-analysis/plato">plato</a><ul>
+							<li>JavaScript 源代码可视化, 静态分析和复杂度管理</li>
+							</ul>
+							</li>
+							<li><a href="https://github.com/danielstjules/jsinspect">jsinspect</a><ul>
+							<li>找出粘贴复制和代码结构类似的代码</li>
+							</ul>
+							</li>
+						</ul>
+						<table>
+							<tr class="general-codereview-platos">
+								<td><img class="fragment" src="./images/14598775638257.jpg" alt=""></td>
+								<td><img class="fragment" src="./images/14599298644351.jpg" alt=""></td>
+							</tr>
+						</table>
+					</section>
+
+					<section data-markdown>
+						## [针针见血：怎么消除JavaScript中的代码坏味道](https://github.com/gaohailang/blog/issues/5)
+
+						> 如临时定时器，双向数据绑定的坑，复杂的分支语句，重复赋值等，对它们进行分析如现场还原，糟糕代码回顾，问题诊断和识别（通过ESlint或其他工具），代码重构方案，给出了怎么写好代码的一手经验~
+
+					</section>
+
+					<section data-markdown>
+						## 在线上运行
+
+						- 性能调优
+						- 上线准备
+						- 安全
+					</section>
+					<section data-markdown>
+						## StrongLoop 性能优化系列
+
+						- [heap profiling](https://strongloop.com/strongblog/node-js-performance-heap-profiling-tip/)
+						- [内存泄露](https://strongloop.com/strongblog/node-js-performance-tip-of-the-week-memory-leak-diagnosis/)
+						- [CPU profiling](https://strongloop.com/strongblog/node-js-performance-tip-cpu-profiler/)
+						- [scaling proxies clusters](https://strongloop.com/strongblog/node-js-performance-scaling-proxies-clusters/)
+						- [event loop monitoring](https://strongloop.com/strongblog/node-js-performance-event-loop-monitoring/)
+						- [garbage collection](https://strongloop.com/strongblog/node-js-performance-garbage-collection/)
+					</section>
+					<section data-markdown>
+						![](./images/14598782052144.jpg)
+					</section>
+					<section data-markdown>
+						![](./images/14598781886376.jpg)
+					</section>
+
+					<section data-markdown>
+						## 上线前准备
+
+						- Gzip压缩中间件/Nginx开启
+						- 静态文件中间件/Nginx加入
+						- 避免尽量少的复杂同步代码（Event Loop 监控）
+						- 打好全量的log信息（通过环境变量和进程信号调整）
+						- 合理的处理异常
+					</section>
+
+					<section data-markdown>
+						## 安全施工
+
+						- 不要使用过期老旧的版本框架
+						- 快点用上 https
+						- Helmet 中间件
+						- 安全使用Cookie & Session
+						- 确保其他组件依赖是安全的
+						- 其他一些基础的：[security-checklist](https://blog.risingstack.com/node-js-security-checklist)
+					</section>
+
+					<section data-markdown>
+						## [2016年新项目哪些注意点？](https://github.com/gf-rd/blog/issues/29)
+
+						- 异步函数支持回调惯例和Promise新写法
+						- 智能的 .npmrc 和正确的版本管理做法
+						- Web 应用开发的十二条军规
+						- 始终用 npm init 开始新项目
+						- 使用标准的 JavaScript 代码风格
+							- 使用 eslint 工具，同时配合 eslint-plugin-standard 插件
+					</section>
+
+					<section data-markdown>
+						## 应用服务器上下游
+
+						- 关于openresty & haproxy & varnish
+						- 关于 mongodb, redis
+						- 关于log，监控和指标计算
+						- 关于 kafka 等
+						- 关于扩容，Docker，kubernetes
+					</section>
+				</section>
+
+				<!-- Web 开发 与 Node.js -->
+				<!-- <section>
+					<section>
+						<h1>Web 开发 与 Node.js</h1>
+					</section>
+				</section> -->
 
 				<!-- 微服务和Node.js -->
 				<section>
@@ -373,358 +741,35 @@
 					</section>
 				</section>
 
-				<!-- Koa2 与 Node.js -->
+				<!-- 我们和开源 -->
 				<section>
 					<section>
-						<h1>Koa2 与 Node.js</h1>
+						<h1>我们和开源</h1>
 					</section>
-					<section data-markdown>
-						## 关于 Koa2
-
-						- 何时发布
-							- 等V8引擎（Chromium）开发完 async/await
-							- 被集成到 Node.js
-							- 不要害怕，很多人通过babel用在线上了
-						- 哪些改动？
-					</section>
-					<!-- 为什么选择 Koa2 -->
-					<section data-markdown>
-						## 为什么选择 Koa2
-
-						- 1 异步操作的同步写法
-						- 2 错误处理
-						- 3 中间件
-							- response-time demo
-					</section>
-					<section data-markdown>
-						## 语义合适的异步
-
-						```js
-							var {storeUserInsInfo, storeLatestInfo, storeHotInfo} = apiConf;
-							var {externalInfo, portSelfInfo, portSelfStocks} = apiConf;
-
-							## externalInfoFetch，storeInfoFetch等都是用于规整请求的入参
-
-							router.get('/opt-auth/pickup', async (ctx, next)=>{
-								var userId = ctx.request.get('userId');
-								var reses = await Promise.all(_.map([
-									externalInfoFetch('ZCCJTT'), // 外部精选资讯
-									storeInfoFetch(storeLatestInfo),
-									storeInfoFetch(storeUserInsInfo, userId)
-								], (opt)=>{
-									return rp(opt);
-								}));
-								ctx.body = {
-									"external-headline": reses[0],
-									"store-latest": reses[1],
-									"store-myinterest": reses[2]
-								};
-							});
-						```
-					</section>
-					<section data-markdown>
-						## 干干净净的错误错误
-
-						```js
-						// error handler to JSON stringify errors
-						const errorRes = require('./middleware/error-res');
-						app.use(errorRes);
-
-						module.exports = async function(ctx, next) {
-							try {
-								await next();
-							} catch (err) {
-								if (err == null) {
-									err = new Error('Null or undefined error');
-								}
-								// some errors will have .status
-								// however this is not a guarantee
-								ctx.status = err.status || 500;
-								ctx.type = 'application/json';
-								ctx.body = {
-									success: false,
-									message: err.stack
-								};
-								ctx.app.emit('error', err, this);
-							}
-						};
-
-						// 用于关闭前的一些处理如保存数据，记录错误，发送邮件等等
-						process.on('uncaught', ()={});
-						```
-					</section>
-					<section data-markdown>
-						## 优雅的中间件 - 回形针
-
-						```js
-						function responseTime() {
-							return async(ctx, next) => {
-								var start = Date.now();
-								await next();
-								var delta = Math.ceil(Date.now() - start);
-								ctx.set('X-Response-Time', delta + 'ms');
-							}
-						}
-						```
-					</section>
-					<!-- 我们的koa中间件 -->
-					<section data-markdown>
-						## 我们的koa中间件
-
-						- 常见的middleware
-						- compose koa
-						- koa-adapter （1.x中间件的引入）
-						- 文件即路由
-						- koa-validator
-					</section>
-					<section data-markdown>
-						![](./images/14598798901987.jpg)￼
-					</section>
-					<section data-markdown class="koa-composte-codes">
-						![](./images/14598798348020.jpg)￼￼
-
-						```js
-						function compose(middleware){
-							return function *(next){
-								if (!next) next = noop();
-
-								var i = middleware.length;
-
-								while (i--) {
-									next = middleware[i].call(this, next);
-								}
-
-								return yield *next;
-							}
-						}
-						```
-					</section>
-					<section data-markdown>
-						## 兼容中间件 - [koa adapter](https://github.com/th507/koa-adapter)
-
-						把es6的generator和yield的变成es7的async/await写法
-
-						```js
-						// use Koa 1.0 middleware
-						app.use(function*(next) {
-						  const start = Date.now()
-
-						  yield next
-
-						  const ms = Date.now() - start
-						  console.log(`${this.method} ${this.url} - ${ms}ms`)
-						})
-
-						// koa-logger@1 only support koa@1
-						const logger = require("koa-logger")
-
-						// use legacy middlewares with adapt(...)
-						app.use(adapt(logger))
-						```
-					</section>
-					<section data-markdown>
-						## 接口验证和数据验证
-
-						- [koa-validate: validate/format req params](https://github.com/RocksonZeta/koa-validate)
-						- [joi: object schema validation](https://github.com/hapijs/joi)
-
-						```js
-						ctx.checkQuery('query', 'Invalid query').notEmpty();
-						ctx.checkQuery('type', 'Invalid type').
-								isIn(baseSearchTypes.concat(['all', 'stock']));
-
-						var joiUserSchema = Joi.object({
-							 name: Joi.object({
-									 first: Joi.string().required(),
-									 last: Joi.string().required()
-							 }),
-							 email: Joi.string().email().required(),
-							 bestFriend: Joi.string().meta({ type: 'ObjectId', ref: 'User' }),
-							 metaInfo: Joi.any()
-						 });
-						```
-					</section>
-				</section>
-
-				<!-- 日常开发与 Node.js -->
-				<section>
 					<section>
-						<h1>日常开发与 Node.js</h1>
-					</section>
-					<section data-markdown>
-						## 日常注意点
-
-						- ES6 化
-						- npm scripts
-						- 性能调优
-						- 上线准备
-						- 安全
-						- 2016年新注意点
-					</section>
-
-					<section data-markdown>
-						### 迁移 legacy 代码
-
-						```js
-						// before
-						var page = req.query.page,
-							, size = req.query.size;
-						// after
-						let {pgae, size} = req.query;
-						rp(url, {page, size});
-						```
-						### Babel 集成
-						```json
-						{
-							"presets": ["es2015-node5"],
-							"plugins": [
-								"transform-async-to-generator",
-								"syntax-async-functions"
-							]
-						}
-						```
-					</section>
-
-					<!-- npm scripts 构建过程 -->
-					<section data-markdown>
-						## npm scripts 构建过程
-						更详细参见我们的[脚手架文章](https://github.com/gf-rd/blog/issues/20)
-
-						- 及时更新依赖
-						- file watch
-						- 入库前检查
-						- 代码质量检查
-					</section>
-					<section data-markdown>
-						## [npm-check](https://github.com/dylang/npm-check)
-
-						![](./images/14598767264510.jpg)￼
-					</section>
-
-					<section data-markdown>
-						## File Watch with nodemon
-
-						```json
-						{
-							"main": "index.js",
-							"scripts": {
-								"dev": "nodemon --exec babel-node -- $npm_package_main"
-							}
-						}
-						```
-						![](./images/14598770272183.jpg)￼
-					</section>
-
-					<section data-markdown>
-						## 入库前检查
-
-						[husky](https://npmjs.org/package/husky) 可以修改你的git命令，提供hook点在commit/push/merge 前执行检查
-
-						- npm run precommit : npm test
-						- npm run prepush : npm-run-all lint test test:deps
-						- npm run inspect : jsinspect
-
-						![](./images/14599285872337.jpg)
-					</section>
-
-					<section>
-						<h2 id="-">代码质量检查</h2>
+						<h2 id="-">开源的参与和贡献</h2>
 						<ul>
-							<li><a href="https://github.com/es-analysis/plato">plato</a><ul>
-							<li>JavaScript 源代码可视化, 静态分析和复杂度管理</li>
-							</ul>
-							</li>
-							<li><a href="https://github.com/danielstjules/jsinspect">jsinspect</a><ul>
-							<li>找出粘贴复制和代码结构类似的代码</li>
-							</ul>
-							</li>
+							<li>ES6</li>
+							<li>Angular2</li>
+							<li>更多见Blog，我们的技术分享</li>
 						</ul>
+						<hr>
 						<table>
-							<tr class="general-codereview-platos">
-								<td><img class="fragment" src="./images/14598775638257.jpg" alt=""></td>
-								<td><img class="fragment" src="./images/14599298644351.jpg" alt=""></td>
+							<thead>
+							<tr>
+								<th style="text-align:center">QCon分享</th>
+								<th style="text-align:center">翻译</th>
+								<th style="text-align:center">技术博客</th>
 							</tr>
+							</thead>
+							<tbody class="gftech-opensources">
+								<tr>
+								<td style="text-align:center"><img src="./images/14598823363661.jpg" class="fragment gftech-opensource-1"></td>
+								<td style="text-align:center"><img src="./images/IMG_9916.jpg" class="fragment gftech-opensource-2"></td>
+								<td style="text-align:center"><img src="./images/14598823953064.jpg" class="fragment gftech-opensource-3"></td>
+								</tr>
+							</tbody>
 						</table>
-					</section>
-
-					<section data-markdown>
-						## [针针见血：怎么消除JavaScript中的代码坏味道](https://github.com/gaohailang/blog/issues/5)
-
-						> 如临时定时器，双向数据绑定的坑，复杂的分支语句，重复赋值等，对它们进行分析如现场还原，糟糕代码回顾，问题诊断和识别（通过ESlint或其他工具），代码重构方案，给出了怎么写好代码的一手经验~
-
-					</section>
-
-					<section data-markdown>
-						## 在线上运行
-
-						- 性能调优
-						- 上线准备
-						- 安全
-					</section>
-					<section data-markdown>
-						## StrongLoop 性能优化系列
-
-						- [heap profiling](https://strongloop.com/strongblog/node-js-performance-heap-profiling-tip/)
-						- [内存泄露](https://strongloop.com/strongblog/node-js-performance-tip-of-the-week-memory-leak-diagnosis/)
-						- [CPU profiling](https://strongloop.com/strongblog/node-js-performance-tip-cpu-profiler/)
-						- [scaling proxies clusters](https://strongloop.com/strongblog/node-js-performance-scaling-proxies-clusters/)
-						- [event loop monitoring](https://strongloop.com/strongblog/node-js-performance-event-loop-monitoring/)
-						- [garbage collection](https://strongloop.com/strongblog/node-js-performance-garbage-collection/)
-					</section>
-					<section data-markdown>
-						![](./images/14598782052144.jpg)￼
-					</section>
-					<section data-markdown>
-						![](./images/14598781886376.jpg)￼
-					</section>
-
-					<section data-markdown>
-						## 上线前准备
-
-						- Gzip压缩中间件/Nginx开启
-						- 静态文件中间件/Nginx加入
-						- 避免尽量少的复杂同步代码（Event Loop 监控）
-						- 打好全量的log信息（通过环境变量和进程信号调整）
-						- 合理的处理异常
-					</section>
-
-					<section data-markdown>
-						## 安全施工
-
-						- 不要使用过期老旧的版本框架
-						- 快点用上 https
-						- Helmet 中间件
-						- 安全使用Cookie & Session
-						- 确保其他组件依赖是安全的
-							- [david] - Node.js module that tells you when your project npm dependencies are out of date
-						- 其他一些基础的：[security-checklist](https://blog.risingstack.com/node-js-security-checklist)
-					</section>
-
-					<section data-markdown>
-						## [2016年新项目哪些注意点？](https://github.com/gf-rd/blog/issues/29)
-
-						- 异步函数支持回调惯例和Promise新写法
-						- 智能的 .npmrc 和正确的版本管理做法
-						- Web 应用开发的十二条军规
-						- 始终用 npm init 开始新项目
-						- 使用标准的 JavaScript 代码风格
-							- 使用 eslint 工具，同时配合 eslint-plugin-standard 插件
-					</section>
-				</section>
-
-				<!-- Web 开发 与 Node.js -->
-				<section>
-					<section>
-						<h1>Web 开发 与 Node.js</h1>
-					</section>
-					<section data-markdown>
-						## 应用服务器上下游
-
-						- 关于openresty & haproxy & varnish
-						- 关于 mongodb, redis
-						- 关于log，监控和指标计算
-						- 关于扩容，k8s
-						- 关于 kakfa 等
 					</section>
 				</section>
 
