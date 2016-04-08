@@ -5,19 +5,19 @@
 
 
 ```note
-前几位的分享都特别棒，最后我给大家带来的topic是讲述我们广发证券这样一个传统券商在新技术微服务，koa上的一些使用尝试的经验。
+前几位的分享都特别棒，最后我给大家带来的topic是讲述我们广发证券这样一个传统券商在新技术如nodejs，微服务，koa上的一些尝试和使用经验吧。
 
-先来个简单的自我介绍：我毕业前在百度实现做前端开发的一些工作，临近毕业决定去豌豆荚这家创业公司做WebApp开发（主要集中在Angular使用上）。接下来从去年开始到目前所在的广发证券，玩了下之前一直想尝试的混合应用的开发，体验了近乎独立开发一款app的体验，而现在主要是focus在Node.js在团队内部的使用和推广上。
+先做个简单的自我介绍：我13年毕业，之前在百度实习做前端开发的一些工作，临近毕业去了豌豆荚这家创业公司做WebApp开发（主要集中在Angular使用上）。接下来从去年5月到目前所在的广发证券，先是做混合应用ionic相关开发，而现在主要是focus在Node.js在团队内部的使用和推广上。
 
-私下我对技术还是非常感兴趣，会有自己的一些思考和理解，会翻译和写一些文章在网上。
+私下我对技术还是非常感兴趣，结合自己思考和理解，会翻译和写一些文章在自己的github的博客上。
 
 ```
 
 ### 分享大纲
 
 ```note
-今天我要分享的agenda大致是：
-先讲下我们技术实践产生的背景 - 即我们这家公司团队是谁，然后今天的主角node.js的在团队的定位，然后正式进入主题前会简单回顾下目前的API Server的发展和未来，进入正式的分享后：我会先后从 koa2相关的实践，普通的node开发，node应用上下游 进行讲诉，最后以高大上的微服务结尾。
+这是今天我要分享的大纲大致是：
+先讲下我们技术实践产生的背景 - 即我们这个团队是谁。然后是我们今天的主角node.js的在团队内的选型定位，我们怎么看待要实施的API Server，看它的发展历史和未来展望。接着我会先后从 koa2相关的实践，普通的node开发进行讲诉，最后以微服务结尾。
 // 如果时间允许会看下我们在开源的贡献和参与。
 ```
 
@@ -28,8 +28,9 @@
 ```note
 那我们是谁呢，广发证券，国内的TOP3的券商的信息技术部门。
 从13年开始，我们已经重视相关技术的积累，我们标榜自己是一只fintech范的团队。
-我们希望和国际投行对肩，『目前证券行业创新高涨尤其现在的互联网金融，在国际化进程中，IT人员会占到 1/3的比例，国内远远不到，我们在这人员配置方面还在努力。
-我们的技术选型时非常前言的，可以看到我们在13年就开始使用类似于angular, node.js等，非常早的运用这些技术框架开发复杂运用的公司了（金融？
+我们希望和国际投行对肩，『目前证券行业创新高涨尤其现在的互联网金融。
+//在国际化进程中，IT人员会占到 1/3的比例，国内远远不到，我们在这人员配置方面还在努力。
+我们的技术选型时非常前言的，可以看到我们在13年就开始使用类似于angular, node.js等，算是非常早的运用这些技术框架开发复杂运用的公司了（金融？
 ```
 
 ```note
@@ -139,7 +140,7 @@
 对于callback自然不用多说，把异步撸直了不用担心代码意大利面条式的。
 promise也是不错的异步原语但是比较verbose，then and then的。
 比起generator更直白，需要wrap，co，yield，* 这些是什么鬼？！）
-我们看下代码：这是读取目录下所有路径和markdown文件内容，然后拼接成字符串的操作。怎么样是不是非常直观不需要callback了，但是不用担心我们的操作不是同步和阻塞的、
+我们看下代码：这是读取目录下所有路径和markdown文件内容，然后拼接成字符串的操作。怎么样是不是非常直观不需要callback了，但是不用担心我们的操作仍然是异步的，不会阻塞和等待
 await关键词必须在async fucntion有有效，await通常等待一个promise的值。
 
 那错误处理呢，如果promise 抛异常可以被try catch住（）
@@ -490,87 +491,11 @@ Docker, 用来打包，分发和在容器中运行应用的好用工具。它和
 #### 加入这场 FinTech Storm
 
 ```note
-感谢大家，希望今天的分享能让大家有收获，
+感谢大家，可能今天的内容比较多，不管怎么样希望今天的分享能让大家有些收获，
 一起来玩：
 撩开袖子开始动手吧，到我们这里玩node.js吧
 
 没过瘾，来海岸城约饭交流，SCC 8 楼年终我们会有分享会，更深的技术交流还有金融业务知识
 ```
-
-
-
-调整下结构（如关于广发放在，在结束，介绍公司最终）
-关于微服务和api server 放在最后（如新东西，放在koa2，node.js后期啊）
-koa2 adapter 再讲些（如老旧的是什么对比）
-停顿，精简部分（少讲些，如graphql，）
-全量广发技术栈（整体印象，让听众有全局认识）
-缩进web开发到日常开发中(一页）
-开头页面跳转下行间距等
-
-
-#### 扩展阅读：
-
-
-##### API Server
-
-https://strongloop.com/strongblog/nodejs-loopback-deployd-api-serve/
-Todo: 更新下新时代的 relay falcor 数据接口
-
-
-the first three generations of API apps. 
-
-Birth of API Server:
-like Java's Sprint MVC or Struts. Rails, Django. sails, geddy - include a database abstraction (typically an ORM for RDBMS only), templating libraries for rendering HTML, and a base controller for gluing the two together.  但是 ajax 变多，客户端自己灵活的渲染模板， mvc based backend stretched to serve as both the web application and API server. controllers would implement some methods that returned an entire rendered page while some methods that would return data
-
-
-the Thin Server:
-with app app moving into client and an entirely separate api server. both could be thinned out. web app no longer could directly access the database - this access instead could be pased through to the client. frameworks and databases: MongoDB, CouchDB, Sinatra, Express, Deployd, Meteor and others.
-
-making data on the wire the first class citizen. surfacing database style APIs to JSON document databases. by need data on the wire to transfer state to and from various data sources(database, backend services, etc)
-client require much more from an API server. access to raw data is important, but clients require much more from an API server: data aggregation, security, validation, and denormalization are usually a requirement.
-
-
-Optimized API Delivery:
-一个pass-through的api 不利于大型项目的扩展，因为需要access to many data sources. 打包请求的特性让 building api simple is helpful. 但是把这些特定当做黑盒子让customization 实施起来很头疼。最终 REST 和 http 变成了api服务器的标准，但是should not dictate the design of our API server
-
-
-打开黑盒子！！
-Next generation API servers should provide all the out of the box features clients require, especially the hard parts, and provide hooks everywhere. 如 app.remoutes() API 返回 apis http routes, schema definitions, 和其他跟你api服务器相关的元数据信息用于 scaffolding client app, generating 文档，
-
-
-Data Accesses:
-大型项目使用很多数据源： databases, other REST APIs, proprietary services等  API server should provide an abstract API to these data sources that allow you to describe relationships and do ad hoc aggregation and filtering.
-to define a list of access controls. 通过配置很容『now only the user that owns an account may read or write it』
-
-
-Aggregation and Mashup:
-聚合通过简单的 joining of data. (denormalize data from various sources, drop data into JSON document database)
-譬如用户首页包括的数据可能 span many datasources. aggregated into a single document and easily fetched when homepage is loaded. 问题是 latent ahead-of-time denormalization. 可能会过期（ Java的 Teiid 来解决， without latent copying or moving data）- Loopback 中是 allows you to define relationships between data, even from distributed data sources, and request the aggregate data based on relationship.
-如the product and product detail data could come from an inventory database, and the related products could come from a separate backend REST or even SOAP API.
-
-curl http://api.myapp.com/api/products/42
- ? filter[include] = productDetails
- & filter[include]  = relatedProducts
-
-
-REST:
-treat REST as transport, 而不是编程模型。API server 应该跟容易实施 REST api. 不要和 http 混合了你的数据应该也可以通过 web sockets 去访问(just provide a client access to another protocol)
-
-
-浏览器和移动端应用， 复杂度在增加， 需要更高级的 data acdess. several generations of API servers and frameworks has risen to meet this demand by supporting the requirement of these rich applications.
-;
-
-
-
-<!--所有这些有名的标准规范有他们各种的奇怪之处。一些是过于复杂，一些只能处理读取没有覆盖到更新接口。一些又严重和REST走失。许多人选择构建它们自己的，但是最终也要解决它们设计上带来的问题。
-
-我不认为现在有什么方案是个大满贯（完美的），但是下面是我对API应该有的功能的一些思考：
-It should be predictable. Your endpoints should follow consistent conventions.
-It should allow fetching multiple entities in one round trip: needing 15 queries to fetch everything you need on page load will give poor performance.
-Make sure you have a good update story: many specifications only covers reads, and you’ll need to update stuff sometimes.
-It should be easy to debug: looking at the Chrome inspector’s network tab should easily let me see what happened.
-It should be easy to consume: I should be able to easily consume it with fetch, or have a well supported client library (like Relay)
-我没有找到能覆盖这些需求的方案。如果有，务必让我知道。
-同事考虑，如果你实施一个标准化的RESTful资源路径时，使用Swagger来文档化我们的API-->
 
 
