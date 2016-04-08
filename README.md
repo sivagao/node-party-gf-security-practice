@@ -17,7 +17,7 @@
 
 ```note
 今天我要分享的agenda大致是：
-先讲下我们技术实践产生的背景 - 即我们这家公司团队是谁，然后今天的主角node.js的在团队的定位，然后正式进入主题前会回顾下目前的API Server的发展和未来，进入正式的分享后：我会先后从 koa2相关的实践，普通的node开发，node应用上下游组件如数据库负载均衡等，最后以高大上的微服务结尾。
+先讲下我们技术实践产生的背景 - 即我们这家公司团队是谁，然后今天的主角node.js的在团队的定位，然后正式进入主题前会简单回顾下目前的API Server的发展和未来，进入正式的分享后：我会先后从 koa2相关的实践，普通的node开发，node应用上下游 进行讲诉，最后以高大上的微服务结尾。
 // 如果时间允许会看下我们在开源的贡献和参与。
 ```
 
@@ -27,16 +27,16 @@
 
 ```note
 那我们是谁呢，广发证券，国内的TOP3的券商的信息技术部门。
-从13年开始，我们已经重视相关技术fintech，
-我们希望和国际投行对肩(『证券行业创新高涨，国际化进程中，投行等』)（IT人员会占到 1/3的比例，国内远远不到）
-我们的技术选型时非常前言的，最早运用这些技术框架开发复杂运用的公司了（金融？
+从13年开始，我们已经重视相关技术的积累，我们标榜自己是一只fintech范的团队。
+我们希望和国际投行对肩，『目前证券行业创新高涨尤其现在的互联网金融，在国际化进程中，IT人员会占到 1/3的比例，国内远远不到，我们在这人员配置方面还在努力。
+我们的技术选型时非常前言的，可以看到我们在13年就开始使用类似于angular, node.js等，非常早的运用这些技术框架开发复杂运用的公司了（金融？
 ```
 
 ```note
-为什么这么做了，激进的采用这样的方式，首先这些新的基于互联网的业务上允许了。然后最主要还是人员上的思考。
-我们需要这样的技术态度，来吸引想在座爱玩技术的你们，然你们用这些新技术带我们弯道超车（要知道这些开源技术很多时候比原本自研的强多了社区强以后找工作也好找，偷笑），最终我们致力于建立学习型组织在现在高速发展的技术世界保持前沿，而不是全被耦进入复杂业务中。
+为什么这么做了，激进的采用这样的方式，首先这些新的基于互联网的新业务上允许了而且需要迭代快开发效率高的技术。然后最主要还是人员上的思考。
+我们需要这样的技术态度，来吸引想在座爱玩技术的你们，你们用这些新技术带我们弯道超车，要知道这些开源技术很多时候比原本自研的强多了，社区强大以后找工作也好找，偷笑），最终我们致力于建立学习型组织在现在高速发展的技术世界保持前沿，而不是完全被陷入在复杂业务中。
 
-所以在13年我们就开始大量的使用诸如angularjs，node.js来构建我们的应用。那么Node.js在我们公司技术栈到底是什么定位呢？
+那么就不难理解我们目前技术栈选项的背后，那么究竟 Node.js 在我们公司技术栈到底是什么定位呢？
 
 // 去看我们的一些技术选项前，先看看我们是什么样的组织，再看看我们对开源技术的态度，这样才能得出一些背后的原因，也给你们一些技术参考。
 //（我是较高复杂度的譬如购买一个理财产品很多逻辑的判断和，流量上的倒不是很大，但业务上流动的钱到时候百千万到亿的~，其次我们推崇的微服务就允许让我们xxx（因为它xxx
@@ -48,12 +48,12 @@
 #### 我们的技术全景图
 
 ```note
-这是我们的技术体系全景图（对它感兴趣的会后可以详细在看），我们先要看第二列云端/edge部分，就这里就是我们nodejs发光发热的部分（它在接入层非常灵活的对接前面各种终端入口请求，做他合适做的事情）
-然后在后面与第三列的微服务结合连同背后的更后端的东西。
+这是我们的技术体系全景图，对它感兴趣的会后可以详细在看），我们先要看第二列云端/edge部分，就这里就是我们nodejs发光发热的部分（它在接入层非常灵活的对接前面各种终端入口请求，做他合适做的事情）
+然后在后面与第三列的微服务结合，打通和连接背后的更后端的东西（譬如大数据，金融柜台，交易总线等等）。
 ```
 
 ```note
-并且从去年开始，我们推崇从接入层之后到柜台之前都变微服务，在保证接口服务的健壮性的同时，提供接入层聚合原子化到具体用户场景下的接口。 对微服务不熟悉的没关系，在最后我们会回到他们看和node.js的结合。
+并且从去年开始，我们推崇从接入层之后到柜台之前的服务和业务都变微服务的形式来提供，在保证接口服务的健壮性的同时，提供接入层聚合原子化到具体用户场景下的接口和灵活性。 对微服务不熟悉的听众们/同行们没关系，在分享的最后我们会回到微服务，看看它和node.js的结合。
 ```
 
 
@@ -72,43 +72,49 @@
 ### API Server 和 Node.js
 
 ```note
-好，现在我们知道了我们要实施一个强大的API Server，那在正式动手撩开袖子搞之前，
-有必要看下在更广的视野下它。因为在过于一段时间它们改变了不少。
+好，现在我们知道了我们要在edge层实施一个强大的API 服务器来对接各种微服务，那在正式动手撩开袖子搞之前，有必要看下在更广的视野下理解它的历史和现状。因为在过于一段时间它们改变了不少。
 ```
 
 ```note
-最早的后端渲染页面，通过ajax来满足部分简单的前台交互（这时候后端MVC已经成熟 譬如rails, php,django 都是此中好手。
+最早的后端渲染页面，通过ajax来满足部分简单的前台交互（这时候后端MVC模型已经开始成熟 譬如rails, php,django 都是此中好手。
 
-然后随着移动客户端iOS/Android快速发展和前端webapp化，越来越多的应用逻辑前移，富应用要求动态页面从而把渲染前移，所以此时接口要前后分离，所以restful这种基于资源为中心，加之行动动作的接口框架和规范就流行起来。
+然后随着移动客户端iOS/Android快速发展和前端webapp化，越来越多的应用逻辑前移，富应用要求动态页面从而把渲染前移，所以此时接口要前后数据分离，所以restful这种基于资源为中心，加之http方法对应CRUD行动动作的，以status code 状态吗对应操作结果的接口框架和规范就流行起来。
 
-但是问题还是有的：如资源接口的聚合上，接口数据的适用性上，要知道页面上不会那么傻傻的仅仅对应单个资源。
-所以有些基于RESTful扩展的协议，同时在新时代的，如grpahp来解决这些问题。把更大的权限移到前段
+但是问题还是有的：如资源接口的聚合上，接口数据的适用性上，要知道现在复杂的页面上不会那么傻傻的仅仅对应单个资源，它通常会依赖于多个相关资源的信息和部分信息。
+所以有些基于RESTful扩展的接口约定协议来尝试解决。同时在新时代的，如GraphQL, Falcor，Meteor等来解决这些问题。
 ```
 
 #### RESTful
 
 ```note
-RESTful有它的几层的成熟度模型，业界如 Hekru 提供的指南。对于 JSON API 我们需要在类似于opt-field筛选特定字段，嵌入关联资源等进行统一抽象的接口理解
+那么什么是基于RESTful扩展呢。我们知道RESTful有它3层的成熟度模型，业界也有如Github， Heroku Platform API 提供的指南。对于 JSON API 我们需要在类似于opt-field筛选特定字段，嵌入关联资源等进行统一抽象的接口理解，来满足业务上的一些需要，最好是在http request 中间件层面就处理好，不需要业务的controller在parse这些urlparams和body。
 
 // 看起来每个开发者最后都会疑问那么关于API接口呢？很多人会直接想到RESTful API（因为太流行了），同时SOAP真的成为过去式了。同时现在也有不少其他标准如：HATEOAS, JSON API,HAL,GraphQL 等
+// 第 2 级服务：使用多个 URI，不同的 URI 代表不同的资源，同时使用多个 HTTP 方法操作这些资源，例如使用 POST/GET/PUT/DELET 分别进行 CRUD 操作。这时候 HTTP 头和有效载荷都包含业务逻辑，例如 HTTP 方法对应 CRUD 操作，HTTP 状态码对应操作结果的状态。第3级服务： 使用超媒体hypermedia 作为应用状体引擎。
 ```
 
 
 #### API Server 新方向
 
 ```note
-GraphQL 赋予客户端强大的能力（也是职责），允许它来实施任意的查询接口。结合Relay，它能为你处理客户端状态和缓存。在服务器端实施GraphQL看起来比较困难而且现有的文档大部分是针对Node.js的
+15年Facebook开源自己的relay，也引入了graphql（它是早在12年就被开始使用在它们的ios/andriod项目上）一种依赖于类型系统的数据查询拉取的描述语言。GraphQL 赋予客户端强大的能力（也是职责），允许它来实施几乎任意的查询接口。结合Relay，它能为你处理客户端状态和缓存，统一完成多个component的接口拉取。在服务器端实施GraphQL看起来比较困难。
 
 网飞(NetFlix）的Falcor 看起来它也能提供那些Relay和GraphQL提供的功能，但是对于服务器端的实现要求很低。但现在它仅仅是开发者预览版没有正式发布。
+
+这是现在流行的react技术栈（react+relay+graphql），我们发现之前ad-hoc query要多个复杂业务相关的接口需要后端实施，用graphql就简单多了，让client描述自己需要什么就行了。
+
+// Servers publish a type system specific to their application, and GraphQL provides a unified language to query data within the constraints of that type system. That language allows product developers to express data requirements in a form natural to them: a declarative and hierarchal one.
 ```
 
 #### Meteor
 
 ```note
 
-需要值得一提的是，Meteor，算是异类但是通过类似DDP，Remote Method，pub/sub等非常高效的完成了前后端的数据同步。想想看，前端说模板绑定时需要绑定最新的用户feed，那么通过live query，每次数据库的内容变化，模板就会重新绑定，你不用说任何底层的。
+需要值得一提的是，Meteor，算是异类但是通过类似DDP，Remote Method，pub/sub等非常高效的完成了前后端的数据同步。想想看，
+前端说模板绑定时需要绑定最新的用户feed，那么通过live query，每次数据库的内容变化，变化的内容会自动同步到前端，模板就会重新render。
+通过remote method，你向后端调用数据就像是一个方法调用只不过不是进程间的是跨网络的。但是它太异类的，我们没法在现有的架构下使用它。
 
-我不认为现在有什么方案是个大满贯（完美的），所以我们还是需要结合我们的场景实现自己的API Server。这里我们就引进了koa2。
+所以我觉得现在有什么方案完美的），所以我们还是需要结合我们的场景实现自己的API Server。这里我们就引进了koa2。
 ```
 
 
@@ -119,73 +125,75 @@ GraphQL 赋予客户端强大的能力（也是职责），允许它来实施任
 我们先首先来看koa2是什么. koa 我们都知道是由 Express 原班人马打造的，更小、更富有表现力、更健壮的 Web 框架。通过组合不同的 generator，可以免除重复繁琐的回调函数嵌套，并极大地提升错误处理的效率. 而koa2是通过es7的async/await 来进一步完善异步操作。关于express5和koa的历史可以看这篇文字.
 
 它还没有正式发布，官方会等到node.js实现了async/await后在正式发布。 
-所以需要xxxx
+一般需要如下的步骤，等chromium来实现它，然后node.js把v8的代码合入并且做测试，一般6个月发布正式版本。 不过不用担心，官方已经说了很多人通过babel已经运用在自己的项目中了。而且微软最新edge的浏览器的类V8的ChakraCore js引擎，已经实现了它
 
-它的一些具体改动也就是体现在xxx，后续我们会具体看。
+它的一些具体改动也就是仅仅体现在中间件上，后续我们会具体看。
 ```
 
 #### Why
 
 ```note
-（比起generator更直白，需要wrap，co，yield，* 这些是什么鬼？！）
-和 promise 紧密结合（await 一个 promise 的返回，如果 err 就抛异常） - try catch
+那么为什么会选择它呢，主要是三个原因
 
+应付异步IO我们有类似于callback，promise，node-fiber，generator/yeid的。
+对于callback自然不用多说，把异步撸直了不用担心代码意大利面条式的。
+promise也是不错的异步原语但是比较verbose，then and then的。
+比起generator更直白，需要wrap，co，yield，* 这些是什么鬼？！）
+我们看下代码：这是读取目录下所有路径和markdown文件内容，然后拼接成字符串的操作。怎么样是不是非常直观不需要callback了，但是不用担心我们的操作不是同步和阻塞的、
+await关键词必须在async fucntion有有效，await通常等待一个promise的值。
 
-promise 处理任何异常（explicit and implicit）在异步代码块中（inside then），只需要在 promises chains 链最后加上 .catch(next) -- promise 很不错的异步原语，但是有些 verbose
-
-可能的问题：await 只能运用在 async 的 function 定义中，所以你的代码中可能会有大量的 async 函数
-
-
+那错误处理呢，如果promise 抛异常可以被try catch住（）
 之前express的错误处理相信大家也都知道同步错误可以在app.use的next error-handling middleware，但是对于异步代码中却无能无力因为在你进入回调中已经丢掉调用栈了。除非要在每个node.js惯例的error-first的callback中，手动处理或者把他next出去往上推。 
-统一的错误处理意味着，就是同步代码的异常如json.parse对一个非常字符串进行转意时可以捕获，对于类似于await，promise的reject也能捕获住。
-
-可能的问题：be careful to wrap your code in try/catches, or else a promise might be rejected, in which case the error is silently swallowed. (!) - 或者在 top level 用 try/catch 包下
-callback: domain, 异步错误需要next(err)，同步异常的try-catch等， domain被废弃掉，app.use((err, req, res, next))的忽略
-所以顶层的try-catch 的放置顺序
+统一的错误处理意味着，就是说如同步代码的异常如json.parse对一个非法字符串进行转意时可以try catch，对于异步的类似于等待promise时被reject也能被try catch，但是如果你不去（否着会被吞掉这一点要除以）。所以我们一般需要类似这样的错误处理中间件放在全局的包下
 
 
-中间件的写法也更直观了，这个是koa也都用的优势。
+中间件的写法也更直观了，这个是koa也都用的优势。看这个response-time的，在进入中间件时记住开始时间，然后await 等待后续中间件的执行，然后在结束后被交回执行权限后，计算diff
 要知道得益于koa的回形针的写法，而不用像之前express那样，曲折
-
 ```
 
 #### 我们的koa中间件
 
-	- 常见的middleware
 	- compose koa
+	- 常见的middleware
 	- koa-adapter （常见中间件的引入）
 	- 文件即路由
 	- koa-validator
 
 ```note
-* koa2那些中间件和扩展（罗列出来围绕 koa2）
+中间件是非常重要的概念。要知道，一个Koa的应用就是包含一组async函数写的中间件的对象，然后按照一定顺序对请求操作返回响应。
 ```
 
 ##### koa composite
 
 
 ```note
-那么我们看多个中间件是怎么运行的，是按照上面顺序还是之前express connect那套吗？
+那么我们看多个中间件是怎么运行的。我们发现请求先后从上往下进入进入response-time, logger, content-length, body 函数中，在body函数中我们执行yield后面的设置我们body内容后因为是最后一个中间件，所以执行又继续从下往上执行之前中间件yield后面的部分如设置header头如content-length，response-time, 打log等。整个执行顺序非常像右侧图表现的回形针的样子。
 
-我们会多个中间件组合在一起方便复用和导出，koa-compose 就是内部实现和创建中间件栈的
 
-下面这是它具体的代码
+那么具体是怎么实现的呢？koa-compose 就是内部实现。下面这是它具体的代码（感兴趣的可以看下，可以发现就这十几行的代码就把这些中间件串联起来的逻辑
 ```
 
 
+```note
+这些是比较常见的中间件，官方wiki上有详细的成熟的列表。如cookie的，body parse的，等等
+```
+
 ##### koa adapter
 
-
+```note
 把es6的generator和yield的变成es7的async/await写法
+既然我们用上来koa2，那之前的koa1的中间件怎么办呢，官方推荐做法是在代码仓库提供next分支，来host新的async版本的中间件。当然可以通过koa adapter 这样的中间件来替我们转换。
 
+// 内部实现co.wrap。 If you want to convert a co-generator-function into a regular function that returns a promise, you now use co.wrap(fn*).
+```
 
 ##### Valiate
 
 ```note
-// 关于请求的入参验证
-关于数据模型的验证
-mongodb 本身是schema-less，但这并不意味着我们容忍脏数据的随意插入（只是方便我们修改和扩展数据Schema，方便业务发展）
+关于验证我们有两个，请求入参如query,params,body的检查如是否存在，格式如email，字符长度等
 
+// 关于请求的入参验证
+关于数据模型的验证，mongodb 本身是schema-less，但这并不意味着我们容忍脏数据的随意插入（只是方便我们修改和扩展数据Schema，方便业务发展）。hapi的joi提供了很好的API，mongoose也有自己的plugin机制来实现validate，社区也有插件来统一把两套schema统一如从joi的生成mongoose的schema。
 ```
 
 
@@ -200,10 +208,14 @@ mongodb 本身是schema-less，但这并不意味着我们容忍脏数据的随�
 
 #### ES6化
 
+```note
+以上是koa web相关的，当然我们日常开发也少不了其他部分。譬如现在代码ES6化，构建npm scripts化（它会集中在持续集成，代码质量上），上线前准备（如性能调优，安全），web开发上下游等
+```
+
 ##### 逐渐迁移legacy 代码
 
 ```note
-很多旧代码用es5写起来比较verbose，可以使用最新的es6语法来改造，精简轻量很多。如解析构，模板字符串等等都不错。如：xxx
+很多旧代码用es5写起来比较verbose，可以使用最新的es6语法来改造，精简轻量很多。如解析构，模板字符串等等都不错。如之前从req.query中去数据。现在xxx
 ```
 
 ##### Babel 集成
@@ -216,10 +228,9 @@ mongodb 本身是schema-less，但这并不意味着我们容忍脏数据的随�
 你会发现使用 similiairty 去跑没啥差别，我们看下 .babelrc 中的preset为 es2015-node5，然后就有两个babel的插件用于转换2a的代码
 
 部署es6代码用于线上生产（先构建好 es5-compatible，加入到docker镜像中 ）
+eslint
 ```
 
-babel 编译和上线
-eslint
 
 #### npm scripts 构建过程
 
@@ -253,6 +264,11 @@ nodemon  Simple monitor script for use during development of a node.js app.
 使用hurky可以修改你的git命令，提供hook点在commit/push/merge 前执行检查。
 譬如我们利用npm的hook（pre)在提交commit前运行下我们的单元测试等（在那些），在推送代码仓库前，执行我们的lint检查是否良好的代码格式等等。
 甚至我们可以运行inspect，看看我们是否有存在代码的copy&paste这种情况。
+```
+
+```note
+说到测试，很多人说项目很赶没时间啊。还有人有些测试用例写起来还naive，不想写。其实我们并不需要对所有代码做测试。尤其在迭代速度很块的情况下很多需求没理清楚，说不定一些前天的在明天就要remove掉。
+那么我们会集中在如下部分：
 
 对这些进行测试：
 那些经常要被修改的 change a lot 
@@ -264,11 +280,12 @@ nodemon  Simple monitor script for use during development of a node.js app.
 
 
 ```note
-我们真的应该非常关注我们的代码质量，想想看对于关键代码如基础组件，核心业务功能等。
-因为我们也接手过（相信大家也是），之前有你在公司见过什么操蛋的代码这篇文字很有趣。我们能不能避免这些呢，不要给自己挖坑（事实上我们也乐于给自己挖坑哈 - 啪啪啪打脸程序员的九本指南）
-从 代码复杂度， 代码行数（维持在100一下），eslint errors等等，去关注
-我们也可以通过plato提供的基于日期对关键指标的统计看看代码改进的趋势，是不是朝着好的方向还是走想可怕的不好维护急需重构的深渊。
+我们真的应该非常关注我们的代码质量，想想看对于关键代码如基础组件，核心业务功能如果维护性不好，后续的需求和代码的更改都很困难等。
+因为我们也接手过（相信大家也是），我们能不能避免这些呢，不要给自己挖坑（事实上我们也乐于给自己挖坑哈 - 啪啪啪打脸程序员的九本指南）以不符合设计原理 / 不易维护 / 不易调整 / 不够健壮 / 不够美观的方式解决问题
+我们可以通过plato，从 代码复杂度， 代码行数（维持在100一下），lint出的错误数等，去关注它。
+它也提供的基于日期对关键指标的统计看看代码改进的趋势，是不是朝着好的方向还是走想可怕的不好维护急需重构的深渊。
 
+确保自己不要变成一下说的情况：
 ```
 
 
@@ -279,6 +296,8 @@ nodemon  Simple monitor script for use during development of a node.js app.
 
 我们当然可以通过 eslint rule 来发现：
 如不允许复杂的switch语句，不允许重复reassign等，代码复杂度（if/else等嵌套不超过5等）
+
+哈哈，希望我们尽量不写出这种糟糕的代码
 ```
 
 #### 在线上运行（Production Deploy & Security）
@@ -480,7 +499,6 @@ Docker, 用来打包，分发和在容器中运行应用的好用工具。它和
 
 
 
-
 调整下结构（如关于广发放在，在结束，介绍公司最终）
 关于微服务和api server 放在最后（如新东西，放在koa2，node.js后期啊）
 koa2 adapter 再讲些（如老旧的是什么对比）
@@ -488,7 +506,6 @@ koa2 adapter 再讲些（如老旧的是什么对比）
 全量广发技术栈（整体印象，让听众有全局认识）
 缩进web开发到日常开发中(一页）
 开头页面跳转下行间距等
-
 
 
 #### 扩展阅读：
@@ -542,7 +559,6 @@ treat REST as transport, 而不是编程模型。API server 应该跟容易实�
 
 浏览器和移动端应用， 复杂度在增加， 需要更高级的 data acdess. several generations of API servers and frameworks has risen to meet this demand by supporting the requirement of these rich applications.
 ;
-
 
 
 
