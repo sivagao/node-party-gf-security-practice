@@ -1,62 +1,28 @@
 
-调整下结构（如关于广发放在，在结束，介绍公司最终）
-关于微服务和api server 放在最后（如新东西，放在koa2，node.js后期啊）
-koa2 adapter 再讲些（如老旧的是什么对比）
-停顿，精简部分（少讲些，如graphql，）
-全量广发技术栈（整体印象，让听众有全局认识）
-缩进web开发到日常开发中(一页）
-开头页面跳转下行间距等
-
-
-
 ## Node.js 在广发证券：koa2 和 微服务实战新一代API Server
 
 ### 自我介绍
 
-- 豌豆荚 - WebApp
-- 广发证券 - Hybrid App && Node.js 开发
-- [我的博客](https://github.com/gaohailang/blog) （一些技术上的思考和分享）
 
 ```note
 前几位的分享都特别棒，最后我给大家带来的topic是讲述我们广发证券这样一个传统券商在新技术微服务，koa上的一些使用尝试的经验。
 
-先来个简单的自我介绍：我毕业前在百度实现做前端开发的一些工作，临近毕业决定去豌豆荚这家创业公司做WebApp开发（angular）。接下来从去年开始到目前所在的广发证券，玩了下之前一直想尝试的混合应用的开发，而现在主要是focus在Node.js在团队内部的使用和推广上。
+先来个简单的自我介绍：我毕业前在百度实现做前端开发的一些工作，临近毕业决定去豌豆荚这家创业公司做WebApp开发（主要集中在Angular使用上）。接下来从去年开始到目前所在的广发证券，玩了下之前一直想尝试的混合应用的开发，体验了近乎独立开发一款app的体验，而现在主要是focus在Node.js在团队内部的使用和推广上。
 
 私下我对技术还是非常感兴趣，会有自己的一些思考和理解，会翻译和写一些文章在网上。
-
-![](./images/14598836453050.jpg)
 
 ```
 
 ### 分享大纲
 
-* 我们是谁
-* 我们和开源
-* 我们对 Node.js 的定位
-* API Server 和 Node.js
-* 微服务 和 Node.js
-* Koa2 和 Node.js
-* 日常开发 与 Node.js
-* Web 开发 和 Node.js
-
 ```note
 今天我要分享的agenda大致是：
-先讲下我们技术实践产生的背景 - 即我们这家公司团队是谁，然后今天的主角node.js的在团队的定位，然后正式进入主题前会回顾下目前的API Server的发展和未来，从而正式进入实施的部分。
-普通的node开发，koa2相关的实践，node应用上下游组件如数据库负载均衡等，最后以高大上的微服务结尾。
+先讲下我们技术实践产生的背景 - 即我们这家公司团队是谁，然后今天的主角node.js的在团队的定位，然后正式进入主题前会回顾下目前的API Server的发展和未来，进入正式的分享后：我会先后从 koa2相关的实践，普通的node开发，node应用上下游组件如数据库负载均衡等，最后以高大上的微服务结尾。
 // 如果时间允许会看下我们在开源的贡献和参与。
 ```
 
 
 ### 我们是谁
-
-#### How - 我们是怎么做的
-
-- 金融创新
-![](./images/14598836766862.jpg)
-
-
-- 技术前沿（bleeding - edge）
-![](./images/14598836936018.jpg)
 
 
 ```note
@@ -65,16 +31,6 @@ koa2 adapter 再讲些（如老旧的是什么对比）
 我们希望和国际投行对肩(『证券行业创新高涨，国际化进程中，投行等』)（IT人员会占到 1/3的比例，国内远远不到）
 我们的技术选型时非常前言的，最早运用这些技术框架开发复杂运用的公司了（金融？
 ```
-
-
-#### 这样选型的原因
-
-- 吸引爱玩技术的你们
-- 解决问题弯道超车
-- 形成学习型组织
-
-![](./images/14598837513672.jpg)
-
 
 ```note
 为什么这么做了，激进的采用这样的方式，首先这些新的基于互联网的业务上允许了。然后最主要还是人员上的思考。
@@ -91,24 +47,17 @@ koa2 adapter 再讲些（如老旧的是什么对比）
 
 #### 我们的技术全景图
 
-![](./images/14598838237638.jpg)
-
-
 ```note
 这是我们的技术体系全景图（对它感兴趣的会后可以详细在看），我们先要看第二列云端/edge部分，就这里就是我们nodejs发光发热的部分（它在接入层非常灵活的对接前面各种终端入口请求，做他合适做的事情）
 然后在后面与第三列的微服务结合连同背后的更后端的东西。
 ```
 
-
-#### 和微服务架构结合
-
-![](./images/14598838731799.jpg)
-
-
 ```note
 并且从去年开始，我们推崇从接入层之后到柜台之前都变微服务，在保证接口服务的健壮性的同时，提供接入层聚合原子化到具体用户场景下的接口。 对微服务不熟悉的没关系，在最后我们会回到他们看和node.js的结合。
+```
 
 
+```draft
 // 首先看下我们的全景图xxx，从泛终端作为入口，到我们的云端edge，对接micro services，后面有中间件和大数据backup，最终对标交易平台。
 // 在我们的云端edge就大量使用着node。js来做它适合做的事情，甚至一些对性能不那么苛刻的微服务也有js来构建的（如果解决好类型等开发复杂应用稳定性
 	•	原子化服务 – 细粒度、独立部署、独立维护升级、独立扩容 
@@ -127,44 +76,16 @@ koa2 adapter 再讲些（如老旧的是什么对比）
 有必要看下在更广的视野下它。因为在过于一段时间它们改变了不少。
 ```
 
-#### 不同时代的Server
-
-- Backend 渲染页面 + 部分 Ajax
-- 前后分离 RESTful（或 db access）
-	- RESTful extend
-- API Server 新方向
-	- graphql & falcor
-	- Meteor
-
 ```note
-
 最早的后端渲染页面，通过ajax来满足部分简单的前台交互（这时候后端MVC已经成熟 譬如rails, php,django 都是此中好手。
 
 然后随着移动客户端iOS/Android快速发展和前端webapp化，越来越多的应用逻辑前移，富应用要求动态页面从而把渲染前移，所以此时接口要前后分离，所以restful这种基于资源为中心，加之行动动作的接口框架和规范就流行起来。
 
 但是问题还是有的：如资源接口的聚合上，接口数据的适用性上，要知道页面上不会那么傻傻的仅仅对应单个资源。
 所以有些基于RESTful扩展的协议，同时在新时代的，如grpahp来解决这些问题。把更大的权限移到前段
-
 ```
 
 #### RESTful
-
-- Optional-Field
-- Filter & Sort
-- Pagination
-- Embedded & Sub Resource
-- Bulk Inserts
-
-```sh
-/people?where={"lastname": "Doe"}
-/people?sort=city,-lastname
-?sort=[("lastname", -1)] - mongodb style
-/people?projection={"lastname": 1, "born": 1}
-/comment/?embedded={"author": 0}
-
-curl -d '[{"firstname": "barack", "lastname": "obama"}, {"firstname": "mitt", "lastname": "romney"}]' -H 'Content-Type: application/json' http://eve-demo.herokuapp.com/people
-```
-
 
 ```note
 RESTful有它的几层的成熟度模型，业界如 Hekru 提供的指南。对于 JSON API 我们需要在类似于opt-field筛选特定字段，嵌入关联资源等进行统一抽象的接口理解
@@ -175,19 +96,6 @@ RESTful有它的几层的成熟度模型，业界如 Hekru 提供的指南。对
 
 #### API Server 新方向
 
-- GraphQL & Relay
-	- https://github.com/RisingStack/graphql-server
-- Falcor
-
-![](./images/14598832396579.jpg)
-
-![](./images/14598834022920.jpg)
-
-
-![](./images/14598830486065.jpg)
-
-![](./images/14598832283354.jpg)
-
 ```note
 GraphQL 赋予客户端强大的能力（也是职责），允许它来实施任意的查询接口。结合Relay，它能为你处理客户端状态和缓存。在服务器端实施GraphQL看起来比较困难而且现有的文档大部分是针对Node.js的
 
@@ -195,13 +103,6 @@ GraphQL 赋予客户端强大的能力（也是职责），允许它来实施任
 ```
 
 #### Meteor
-
-http://www.slideshare.net/MeteorJS/meteor-intro2015
-
-- LiveQuery, DDP, publication/subscribe, remote method
-
-
-![](./images/14599935528704.jpg)
 
 ```note
 
@@ -212,12 +113,6 @@ http://www.slideshare.net/MeteorJS/meteor-intro2015
 
 
 ### Koa2 与 Node.js
-
-#### What
-
-- 它是什么
-- 何时发布
-- 哪些改动
 
 ```note
 
@@ -231,126 +126,28 @@ http://www.slideshare.net/MeteorJS/meteor-intro2015
 
 #### Why
 
-- 1 NIO 同步写法
-- 2 错误处理
-- 3 中间件
-    - response-time 展示
-
 ```note
 （比起generator更直白，需要wrap，co，yield，* 这些是什么鬼？！）
+和 promise 紧密结合（await 一个 promise 的返回，如果 err 就抛异常） - try catch
+
 
 promise 处理任何异常（explicit and implicit）在异步代码块中（inside then），只需要在 promises chains 链最后加上 .catch(next) -- promise 很不错的异步原语，但是有些 verbose
 
-
-和 promise 紧密结合（await 一个 promise 的返回，如果 err 就抛异常） - try catch
-
 可能的问题：await 只能运用在 async 的 function 定义中，所以你的代码中可能会有大量的 async 函数
-
-可能的问题：be careful to wrap your code in try/catches, or else a promise might be rejected, in which case the error is silently swallowed. (!) - 或者在 top level 用 try/catch 包下
 
 
 之前express的错误处理相信大家也都知道同步错误可以在app.use的next error-handling middleware，但是对于异步代码中却无能无力因为在你进入回调中已经丢掉调用栈了。除非要在每个node.js惯例的error-first的callback中，手动处理或者把他next出去往上推。 
 统一的错误处理意味着，就是同步代码的异常如json.parse对一个非常字符串进行转意时可以捕获，对于类似于await，promise的reject也能捕获住。
 
-
-中间件的写法也更直观了，这个是koa也都用的优势。
-
-
-```
-
-##### 同步代码
-
-一些例子展示（从search.js等中摘取
-
-```js
-const fsp = require('fs-promise');
-
-async function readDirContent(doc) {
-  let paths = await fs.readdir('docs');
-
-  let files = await paths.map(function(path){
-    return fs.readFile('docs/' + path, 'utf8');
-  });
-
-  this.type = 'markdown';
-  this.body = files.join('');
-};
-```
-
-```js
-  async function fetchSepcialShops (ctx, next){
-    var spNumTypeMap = ['manager', 'developer', 'userFav'];
-    ctx.checkQuery('tradeId', 'Invalid trade id').notEmpty();
-    ctx.checkQuery('shopId', 'Invalid shop id').notEmpty();
-    if(!isReqRight(ctx)) return;
-
-    var {tradeId, shopId} = ctx.request.query
-      , userId = ctx.request.get('userId'), reses;
-    var [r1, r2, r3] = await Promise.all([
-      rp({url: storeSpShopList, qs: {type: 1, userId: tradeId}}),
-      rp({url: storeSpShopList, qs: {type: 2, userId: tradeId}}),
-      userId ? rp({url: userFavShopList, headers: {userId}, qs: {
-        shopId, from: 1, size: 5
-      }}) : {}
-    ]);
-    ctx.body = _.zipObject(spNumTypeMap, [r1.data, r2.data, _.map(r3.data, 'shop')]);
-  }
-```
-
-##### 错误处理
-
-```js
-// error handler to JSON stringify errors
-const errorRes = require('./middleware/error-res');
-app.use(errorRes);
-
-module.exports = async function(ctx, next) {
-  try {
-    await next();
-  } catch (err) {
-    if (err == null) {
-      err = new Error('Null or undefined error');
-    }
-    // some errors will have .status
-    // however this is not a guarantee
-    ctx.status = err.status || 500;
-    ctx.type = 'application/json';
-    ctx.body = {
-      success: false,
-      message: err.stack
-    };
-    ctx.app.emit('error', err, this);
-  }
-};
-
-// 用于关闭前的一些处理如保存数据，记录错误，发送邮件等等
-process.on('uncaught', ()={});
-```
-
-```note
+可能的问题：be careful to wrap your code in try/catches, or else a promise might be rejected, in which case the error is silently swallowed. (!) - 或者在 top level 用 try/catch 包下
 callback: domain, 异步错误需要next(err)，同步异常的try-catch等， domain被废弃掉，app.use((err, req, res, next))的忽略
 所以顶层的try-catch 的放置顺序
-```
 
 
-##### 中间件写法
-
-```js
-function responseTime() {
-	return async(ctx, next) => {
-	  var start = Date.now();
-    await next();
-    var delta = Math.ceil(Date.now() - start);
-    ctx.set('X-Response-Time', delta + 'ms');
-	}
-}
-```
-
-```note
+中间件的写法也更直观了，这个是koa也都用的优势。
 要知道得益于koa的回形针的写法，而不用像之前express那样，曲折
 
 ```
-
 
 #### 我们的koa中间件
 
@@ -364,97 +161,33 @@ function responseTime() {
 * koa2那些中间件和扩展（罗列出来围绕 koa2）
 ```
 
-##### 常见middleware
-
-![](./images/14598798901987.jpg)
-
-
 ##### koa composite
 
 
-multiple middleware into a single middleware for easy re-use or exporting.
-This is exactly what koa-compose does, which Koa internally uses to create and dispatch the middleware stack.
+```note
+那么我们看多个中间件是怎么运行的，是按照上面顺序还是之前express connect那套吗？
 
-```js
-function compose(middleware){
-  return function *(next){
-    if (!next) next = noop();
+我们会多个中间件组合在一起方便复用和导出，koa-compose 就是内部实现和创建中间件栈的
 
-    var i = middleware.length;
-
-    while (i--) {
-      next = middleware[i].call(this, next);
-    }
-
-    return yield *next;
-  }
-}
+下面这是它具体的代码
 ```
-
-![](./images/koa-middleware.gif)
-
-
-![](./images/14598798348020.jpg)
 
 
 ##### koa adapter
 
-## 兼容koa1.x的中间件 - [koa adapter](https://github.com/th507/koa-adapter)
 
 把es6的generator和yield的变成es7的async/await写法
 
-```js
-// use Koa 1.0 middleware
-app.use(function*(next) {
-  const start = Date.now()
-
-  yield next
-
-  const ms = Date.now() - start
-  console.log(`${this.method} ${this.url} - ${ms}ms`)
-})
-
-// koa-logger@1 only support koa@1
-const logger = require("koa-logger")
-
-// use legacy middlewares with adapt(...)
-app.use(adapt(logger))
-```
-
-##### 文件即是路由
-
-```note
-
-```
 
 ##### Valiate
 
-```js
+```note
 // 关于请求的入参验证
-ctx.checkQuery('query', 'Invalid query').notEmpty();
-ctx.checkQuery('type', 'Invalid type').
-    isIn(baseSearchTypes.concat(['all', 'stock']));
-    
-function assertPagintionQuery(ctx) {
-  ctx.checkQuery('page', 'Invalid page').notEmpty().isInt();
-  ctx.checkQuery('size', 'Invalid size').notEmpty().isInt();
-}
+关于数据模型的验证
+mongodb 本身是schema-less，但这并不意味着我们容忍脏数据的随意插入（只是方便我们修改和扩展数据Schema，方便业务发展）
 
-/*
-  关于数据模型的验证
-  mongodb 本身是schema-less，但这并不意味着我们容忍脏数据的随意插入（只是方便我们修改和扩展数据Schema，方便业务发展）
- */
-
- var joiUserSchema = Joi.object({
-     name: Joi.object({
-         first: Joi.string().required(),
-         last: Joi.string().required()
-     }),
-     email: Joi.string().email().required(),
-     bestFriend: Joi.string().meta({ type: 'ObjectId', ref: 'User' }),
-     metaInfo: Joi.any()
- });
 ```
+
 
 
 ### 日常开发 与 Node.js
@@ -469,32 +202,12 @@ function assertPagintionQuery(ctx) {
 
 ##### 逐渐迁移legacy 代码
 
-```js
-// before
-
-// after
-var {pgae, xx} = req.query;
-
-```
-
 ```note
 很多旧代码用es5写起来比较verbose，可以使用最新的es6语法来改造，精简轻量很多。如解析构，模板字符串等等都不错。如：xxx
 ```
 
 ##### Babel 集成
 
-
-```json
-{
-  "presets": ["es2015-node5"],
-  "plugins": [
-    "transform-async-to-generator",
-    "syntax-async-functions"
-  ]
-}
-
-
-```
 
 ```note
 之前有些人吐槽说babel改过后，代码xxx，反正我们是没有遇到，代码不够复杂？！
@@ -510,15 +223,6 @@ eslint
 
 #### npm scripts 构建过程
 
-https://github.com/gf-rd/blog/issues/20
-* npm scripts 使用 - 去掉多余的gulp
-* npm 的一些hook点
-
-- 及时更新依赖
-- file watch
-- 入库前检查
-- 代码质量检查
-
 ```note
 现在的一大趋势，是把多余的Gulp也好，Grunt也好，去除掉
 为什么？因为npm本身提供很好的脚本支持，它不需要都与的gulp wrap(因为你还需要依赖于它去包少了或者它出bug都是问题），直接引入了你需要的工具如（uglifyjs, cssmin, babel等），通过灵活的hook来做一些构建task的设置
@@ -528,25 +232,12 @@ https://github.com/gf-rd/blog/issues/20
 
 ##### 及时更新的依赖
 
-![](./images/14598767264510.jpg)
 
 ```note
 想必大家对前不久的left-padding的事件都有耳闻。一位开发者下架了自己的仅仅用于格式化字符串的一个函数就导致了很多开源项目构建失败。所以我们给出的建议是通过shrinkwrap锁定住要上线的版本，同时定期的通过npm check来检查依赖组件的更新情况。
 ```
 
 ##### file watch
-
-![](./images/14598770272183.jpg)
-
-
-```json
-{
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon --exec babel-node -- $npm_package_main"
-  }
-}
-```
 
 ```note
 我们当然也可以通过pm2来设置，看个人喜好。为他配置一些需要ignore的目录，然后自由编码去吧。
@@ -555,13 +246,6 @@ nodemon  Simple monitor script for use during development of a node.js app.
 ```
 
 ##### 入库检查 
-
-
-- npm run precommit : npm test
-- npm run prepush : npm-run-all lint test test:deps
-- npm run inspect : jsinspect
-
-![](./images/14599285872337.jpg)
 
 
 ```note
@@ -578,16 +262,6 @@ nodemon  Simple monitor script for use during development of a node.js app.
 
 ##### 代码质量检查
 
-- https://github.com/es-analysis/plato
-- https://github.com/danielstjules/jsinspect (js smell 有截图)
-
-![94419d84gw1f2jqooa7i9j213y10an94](../images/94419d84gw1f2jqooa7i9j213y10an94.jpg)
-
-
-![](./images/14598775638257.jpg)
-
-![](./images/14599298644351.jpg)
-
 
 ```note
 我们真的应该非常关注我们的代码质量，想想看对于关键代码如基础组件，核心业务功能等。
@@ -600,9 +274,6 @@ nodemon  Simple monitor script for use during development of a node.js app.
 
 #### JS Smells 代码坏味道
 
-- copy-paste
-- repeat xxx
-
 ```note
 我之前也从国外的slide整理过一篇文章，对于xxx进行了回顾。感兴趣的可以多看看，看看那些有问题的代码是不是和我们的很像，o(╯□╰)o。如xxx
 
@@ -612,22 +283,11 @@ nodemon  Simple monitor script for use during development of a node.js app.
 
 #### 在线上运行（Production Deploy & Security）
 
-- 性能调优
-- Express/Koa上线准备
-- 安全
-
 ```note
 当然咯，我们代码通过层层考验，最终准备上线了，最好还是需要一些确保如对性能进行调优，具体koa上线设置，安全上有哪些考虑等。
 ```
 
 ##### 性能调优
-
-- [heap profiling](https://strongloop.com/strongblog/node-js-performance-heap-profiling-tip/)
-- [内存泄露](https://strongloop.com/strongblog/node-js-performance-tip-of-the-week-memory-leak-diagnosis/)
-- [CPU profiling](https://strongloop.com/strongblog/node-js-performance-tip-cpu-profiler/)
-- [scaling proxies clusters](https://strongloop.com/strongblog/node-js-performance-scaling-proxies-clusters/)
-- [event loop monitoring](https://strongloop.com/strongblog/node-js-performance-event-loop-monitoring/)
-- [garbage collection](https://strongloop.com/strongblog/node-js-performance-garbage-collection/)
 
 ```note
 我强烈推荐你们看strongloop（关于它和express那些事，link）出品的系列博文，看看如何优化。
@@ -640,12 +300,6 @@ nodemon  Simple monitor script for use during development of a node.js app.
 node.js 非常关键的event loop，在这种单线程下NIO非阻塞IO下实现高并发模型。但是前提是你的代码不要阻塞它，导致后续的请求不能及时被serve。
 最后是garbage collection，这篇文字可以看下v8是怎么管理内存的，heap被分成哪些不同空间。这对于想要精细控制gc非常有帮助。
 ```
-
-![](./images/14598782052144.jpg)
-
-
-![](./images/14598781886376.jpg)
-
 
 ##### Best Practices in Production 
 
@@ -678,12 +332,6 @@ https://strongloop.com/strongblog/best-practices-for-express-in-production-part-
 ```
 
 #### 其他（[Node] - 16年，新 Node 项目注意点）
-  
-  https://github.com/gf-rd/blog/issues/29
-  
-  - 异步函数支持回调惯例和Promise新写法
-  - 智能的 .npmrc 和正确的版本管理做法
-  - npm init
 
   ```note
   我们之前也分享过16年新node项目有哪些注意点的文章，这里也简单提下。
@@ -723,8 +371,6 @@ kafka利用它高吞出的性能做在我们业务里承担一些消息队列的
 
 #### 什么是微服务
 
-![](./images/14598813280552.jpg)
-
 ```note
 这种架构方式并没有非常准确的定义，但是在业务能力、自动部署、端对端的整合、对语言及数据的分散控制上，却有着显著特征。
 微服务架构风格，就像是把小的服务开发成单一应用的形式，每个应用运行在单一的进程中，并使用如HTTP这样子的轻量级的API。这些服务满足某需求，并使用自动化部署工具进行独立发布。这些服务可以使用不同的开发语言以及不同数据存储技术，并保持最低限制的集中式管理。
@@ -738,16 +384,6 @@ kafka利用它高吞出的性能做在我们业务里承担一些消息队列的
 ```note
 这是它的大概组成，在左下角是入口的api gateway也是我们node重点关注的地方，在具体微服务实现后专门被路由到需要服务发现的机制，单独的微服务需要怎么被部署要借助于容器等新的运维devops的支持。
 ```
-
-
-
-![](./images/14598813696713.jpg)
-
-
-
-![](./images/14598813893269.jpg)
-
-
 
 
 ```note
@@ -768,20 +404,15 @@ kafka利用它高吞出的性能做在我们业务里承担一些消息队列的
 
 #### 微服务集成开发
 
+```note
+那么我们想实践微服务，node.js web上需要做哪些工作了？
 - docker 部署
 - 无状态（随时被动态扩缩容掉
 - request监控（链路追踪
 - 配置加载管理（环境变量
-
-```note
-那么我们想实践微服务，node.js web上需要做哪些工作了？
-
 ```
 
 ##### Docker 部署
-
-学习 Docker 容器相关 - https://github.com/gaohailang/blog/issues/13
-
 
 ```note
 Docker, 用来打包，分发和在容器中运行应用的好用工具。它和虚拟机是类似的，独立应用和它的依赖到独立自包含的直到你可以在其他地方运行、允许我们更有有效地使用计算资源、他们的主要差别体现在它们的架构实现方案上
@@ -793,25 +424,6 @@ Docker, 用来打包，分发和在容器中运行应用的好用工具。它和
 
 ##### request: 监控和debug
 
-```js
-require('request-debug')(rp, function(type, data, r) {
-  // put your request or response handling logic here
-  // Todo: request-post data lost? response json.stringify broken?
-  if(type === 'request') {
-    var {debugId, uri, method, body} = data;
-    var userId = data.headers.userId;
-    var more = body ? '' : ('-'+body) + userId ? '' : ('userId:'+userId);
-    debug(`${debugId}-${method}-${uri}` + more);
-  }
-
-  if(type === 'response') {
-    var {debugId, statusCode, body} = data;
-    debug(`${debugId}-response-${statusCode}-`+JSON.stringify(body).slice(0, 155));
-  }
-});
-```
-
-
 ```note
 我们的web应用接受请求，也发送请求。 我们需要对这些请求进行记录和追踪，这样才能对一些用户的具体操作进行trakc甚至replay来辅助我们debug用户的线上问题。
 尤其在我们微服务下，对于大量原子化的外部微服务的请求返回数据进行审视和使用杜绝可能存在的外部broken或者不符合预期的返回搞挂我们的应用，辅助和对口同事撕逼。
@@ -821,16 +433,6 @@ require('request-debug')(rp, function(type, data, r) {
 我们当然可以通过一些工具来可视化这些，如下面risingstack和开源的zipkin，这个分布式的追踪系统来帮忙做这事情，如清晰看到整个请求链路中依赖的接口个别耗时等
 ```
 
-##### request :链路追踪
-
-- zipkin？！全链路监控 @ Google
-- Trace is a visualised stack trace platform designed for microservices. http://trace.risingstack.com
-
-![](./images/14598809054912.jpg)
-
-![](./images/14598809442901.jpg)
-
-
 ##### 配置加载&环境变量
 
 关于配置我们集成了confit和shortstop（来自paypal）。
@@ -839,32 +441,11 @@ require('request-debug')(rp, function(type, data, r) {
 - 基于不同环境实现差异化配置
 - 根据env变量自动加载
 
-```js
-// envfile
-GFWC_storeExShopList=http://shopdev.gf.com.cn/api/store/shop/excellentshop/{id}/{page}/{size}
-GFWC_storeSpShopList=http://shopdev.gf.com.cn/api/store/shop/special
-GFWC_userFavShopList=http://shopdev.gf.com.cn/api/store/auth/favorites/shop/inorg
-
-// 配置：
-{
-  "env": "development",
-  "api": {
-    "articleSearch": "env:GFWC_articleSearch",
-    "shopSearch": "env:GFWC_shopSearch",
-    "stockSearch": "env:GFWC_stockSearch",
-    "portfolioSearch": "env:GFWC_portfolioSearch"
-  }
-}
-
-```
-
 ```note
 我们使用paypal的confit，来加载默认的配置，还会根据通过环境变量env来自动加载环境相关配置文件（做到差异化配置，还有很多增强协议如从环境变量中读取，从yaml文件，从特定文件读取内容，读取相对目录路径到绝对路径等等。
 从环境变量读取你的外部依赖非常重要在微服务下面，我们依赖于此
 社区还有nconf，选一个你顺手的使用起来吧。
 ```
-
-
 
 
 ### 我们和开源
@@ -880,16 +461,8 @@ GFWC_userFavShopList=http://shopdev.gf.com.cn/api/store/auth/favorites/shop/inor
 我们团队大神在去年去QCon上海在将我们在es6上的一些前沿实践（业界也有我们es6-style-guide，可以再参考）
 同时去去年尾声开始在angular2上写书准备，翻译了官方的guide，所以我们收到Google官方的邀请让我们推动ng2在国内文档化的工作。
 更多的一些技术分享，可以在我们的github repo中看到
-几个小图，从大变小的animation？！
-![](./images/14598823363661.jpg)
 
-![IMG_9916](./images/IMG_9916.jpg)
-
-
-![](./images/14598823953064.jpg)
-
-
-可以看到正是我们在技术上的尝试，使得我们在node及其相关的技术选型形成来今天的风格，这是背景大家可以参考和对比。
+可以看到正是我们在技术上的尝试，使得我们在node及其相关的技术选型形成来今天的风格
 ```
 
 
@@ -898,28 +471,24 @@ GFWC_userFavShopList=http://shopdev.gf.com.cn/api/store/auth/favorites/shop/inor
 #### 加入这场 FinTech Storm
 
 ```note
+感谢大家，希望今天的分享能让大家有收获，
 一起来玩：
 撩开袖子开始动手吧，到我们这里玩node.js吧
 
 没过瘾，来海岸城约饭交流，SCC 8 楼年终我们会有分享会，更深的技术交流还有金融业务知识
 ```
 
-![](./images/14598847325506.jpg)
 
-![](./images/14598902035581.jpg)
 
-#### Reference
 
-- [广发IT招聘](http://it.gf.com.cn)
-- 广发RD Github Organization
-- 广发技术Blog
-	- 2016 Node
-- Node.js 在广发实践（本次ppt）
+调整下结构（如关于广发放在，在结束，介绍公司最终）
+关于微服务和api server 放在最后（如新东西，放在koa2，node.js后期啊）
+koa2 adapter 再讲些（如老旧的是什么对比）
+停顿，精简部分（少讲些，如graphql，）
+全量广发技术栈（整体印象，让听众有全局认识）
+缩进web开发到日常开发中(一页）
+开头页面跳转下行间距等
 
-```note
-reference，罗列ppt中有的那些
-
-```
 
 
 #### 扩展阅读：
@@ -973,6 +542,7 @@ treat REST as transport, 而不是编程模型。API server 应该跟容易实�
 
 浏览器和移动端应用， 复杂度在增加， 需要更高级的 data acdess. several generations of API servers and frameworks has risen to meet this demand by supporting the requirement of these rich applications.
 ;
+
 
 
 
