@@ -30,7 +30,7 @@
 		.apiserver-graphqls .current-fragment,
 		.microservice-requests .current-fragment,
 		.general-codereview-platos .current-fragment,
-		.koa-middleware-compose, .current-fragment {
+		.koa-middleware-compose .current-fragment {
 			width: 80%;
 		  position: absolute;
 		  left: 10%;
@@ -157,11 +157,9 @@
 						<h1>Node.js 的定位</h1>
 					</section>
 					<section>
-						<h2>我们的技术全景图</h2>
 						<img src="./images/14598838237638.jpg" alt="">
 					</section>
 					<section>
-						<h2>和微服务架构结合</h2>
 						<img src="./images/14598838731799.jpg" alt="">
 					</section>
 				</section>
@@ -225,7 +223,7 @@
 						<img src="./images/14598834022920.jpg" alt="">
 					</section> -->
 					<section data-markdown>
-						## 神器的Meteor
+						## 另类的Meteor
 
 						- LiveQuery, DDP, pub/sub, remote method
 
@@ -521,6 +519,17 @@
 						![](./images/14599285872337.jpg)
 					</section>
 
+					<section data-markdown>
+						## 哪些部分要测试覆盖
+						npm run coverage : lab -r lcov
+
+						- 那些经常要被修改的 change a lot
+						- 那些有很高复杂度的 risky
+						- 那些重要功能/常被查看的 more traffic
+					</section>
+
+					</section>
+
 					<section>
 						<h2 id="-">代码质量检查</h2>
 						<ul>
@@ -542,6 +551,10 @@
 					</section>
 
 					<section data-markdown>
+						![](./images/94419d84gw1f2jqooa7i9j213y10an94.jpg)
+					</section>
+
+					<section data-markdown>
 						## [针针见血：怎么消除JavaScript中的代码坏味道](https://github.com/gaohailang/blog/issues/5)
 
 						> 如临时定时器，双向数据绑定的坑，复杂的分支语句，重复赋值等，对它们进行分析如现场还原，糟糕代码回顾，问题诊断和识别（通过ESlint或其他工具），代码重构方案，给出了怎么写好代码的一手经验~
@@ -549,17 +562,21 @@
 					</section>
 
 					<section data-markdown>
+						![](./images/54aeed78b5e8033c6b14.png)
+					</section>
+
+					<section data-markdown>
 						## 在线上运行
 
 						- 性能调优
 						- 上线准备
-						- 安全
+						- 安全施工
 					</section>
 					<section data-markdown>
 						## StrongLoop 性能优化系列
 
 						- [heap profiling](https://strongloop.com/strongblog/node-js-performance-heap-profiling-tip/)
-						- [内存泄露](https://strongloop.com/strongblog/node-js-performance-tip-of-the-week-memory-leak-diagnosis/)
+						- [memory leak diagnosis](https://strongloop.com/strongblog/node-js-performance-tip-of-the-week-memory-leak-diagnosis/)
 						- [CPU profiling](https://strongloop.com/strongblog/node-js-performance-tip-cpu-profiler/)
 						- [scaling proxies clusters](https://strongloop.com/strongblog/node-js-performance-scaling-proxies-clusters/)
 						- [event loop monitoring](https://strongloop.com/strongblog/node-js-performance-event-loop-monitoring/)
@@ -614,13 +631,6 @@
 						- 关于扩容，Docker，kubernetes
 					</section>
 				</section>
-
-				<!-- Web 开发 与 Node.js -->
-				<!-- <section>
-					<section>
-						<h1>Web 开发 与 Node.js</h1>
-					</section>
-				</section> -->
 
 				<!-- 微服务和Node.js -->
 				<section>
@@ -776,6 +786,34 @@
 				<!-- 结束end -->
 				<section>
 					<section>
+						<h2>回顾一下</h2>
+
+						<ul>
+							<li class="fragment visible highlight-green">
+								<ul>
+									<li>我们是谁？</li>
+									<li>我们和开源</li>
+								</ul>
+							</li>
+							<li class="fragment visible highlight-red">
+								<ul>
+									<li>对 Node.js 的定位</li>
+									<li>API Server 一览</li>
+								</ul>
+							</li>
+							<li class="fragment visible highlight-blue">
+								<ul>
+									<li>Koa2 和 Node.js</li>
+									<li>日常开发 与 Node.js</li>
+									<li>微服务 和 Node.js</li>
+								</ul>
+							</li>
+						</ul>
+
+					</section>
+					<section>
+						<h2>谢谢大家！</h2>
+						<p>微信：ghlndsl，邮箱：gaohailang@gf.com.cn</p>
 						<img src="./images/14598847325506.jpg">
 						<img src="./images/14598902035581.jpg" class="fragment end-join-frg1">
 					</section>
